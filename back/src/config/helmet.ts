@@ -1,11 +1,12 @@
 import { HelmetOptions } from "helmet"
+import { IncomingMessage, ServerResponse } from "http"
 import { BACKEND_URL } from "./env.js"
 
 const helmetOptions: HelmetOptions = {
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
+            scriptSrc: ["'unsafe-inline'", (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as any).locals.cspNonce}'`],
             styleSrc: ["'self'"],
             imgSrc: ["'self'", "data:", "blob:"],
             connectSrc: ["'self'", BACKEND_URL],
@@ -14,7 +15,7 @@ const helmetOptions: HelmetOptions = {
             frameAncestors: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
-            // upgradeInsecureRequests: [],
+            requireTrustedTypesFor: ["'script'"],
             reportUri: "/api/csp-report",
             reportTo: "csp-endpoint",
         },

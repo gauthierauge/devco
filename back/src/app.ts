@@ -7,10 +7,12 @@ import {initRoutes} from "./config/routes.js";
 import {requestLogger} from "./middleware/requestLogger.js";
 import {errorHandler, notFoundHandler} from "./middleware/error.js";
 import {reportToMiddleware} from "./middleware/security/reportTo.js";
+import {cspNonceMiddleware} from "./middleware/security/cspNonce.js";
 
 const createApp = () => {
     const app = express();
 
+    app.use(cspNonceMiddleware);
     app.use(helmet(helmetOptions));
     app.use(reportToMiddleware);
     app.use(cors(corsOptions));
