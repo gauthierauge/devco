@@ -1,7 +1,8 @@
-import { Express } from "express"
+import { Express } from "express";
+import { productRoutes } from "../routes/productRoutes.js";
 
 const initRoutes = (app: Express) => {
-    //ici toutes les routes les potos
-}
+  app.use("/api", productRoutes);
+};
 
-export { initRoutes }
+export { initRoutes };

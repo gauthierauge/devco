@@ -17,3 +17,14 @@ model User {
   id    Int    @id @default(autoincrement())
   email String @unique
 }
+
+model Product {
+  id          String   @id @default(cuid())
+  label       String
+  description String
+  images      String[]
+  price       Decimal  @db.Decimal(7, 2)
+  category    String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
