@@ -1,7 +1,8 @@
 import { Express } from "express"
+import {cspReportRouter} from "../routes/cspReport.route.js";
 
 const initRoutes = (app: Express) => {
-    //ici toutes les routes les potos
+    app.use("/api", cspReportRouter);
 }
 
 export { initRoutes }

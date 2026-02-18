@@ -1,19 +1,22 @@
 import { HelmetOptions } from "helmet"
+import { BACKEND_URL } from "./env.js"
 
 const helmetOptions: HelmetOptions = {
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
             scriptSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
+            styleSrc: ["'self'"],
             imgSrc: ["'self'", "data:", "blob:"],
-            connectSrc: ["'self'"],
+            connectSrc: ["'self'", BACKEND_URL],
             fontSrc: ["'self'"],
             objectSrc: ["'none'"],
             frameAncestors: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
-            reportUri: "/csp-report",
+            // upgradeInsecureRequests: [],
+            reportUri: "/api/csp-report",
+            reportTo: "csp-endpoint",
         },
     },
     crossOriginEmbedderPolicy: false,
@@ -23,6 +26,6 @@ const helmetOptions: HelmetOptions = {
         includeSubDomains: true,
         preload: true,
     },
-};
+}
 
-export { helmetOptions };
+export { helmetOptions }

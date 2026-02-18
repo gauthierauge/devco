@@ -17,3 +17,9 @@ model User {
   id    Int    @id @default(autoincrement())
   email String @unique
 }
+
+model CspReport {
+  id        Int      @id @default(autoincrement())
+  payload   Json
+  createdAt DateTime @default(now())
+}
