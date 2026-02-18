@@ -1,6 +1,8 @@
 import express from "express";
 import helmet from "helmet";
 import cors from "cors";
+import path from "node:path";
+import {fileURLToPath} from "node:url";
 import { corsOptions } from "./config/cors.js";
 import { helmetOptions } from "./config/helmet.js";
 import {initRoutes} from "./config/routes.js";
@@ -11,6 +13,8 @@ import {cspNonceMiddleware} from "./middleware/security/cspNonce.js";
 
 const createApp = () => {
     const app = express();
+    const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    app.use(express.static(path.join(__dirname, "public"), { dotfiles: "allow" }));
 
     app.use(cspNonceMiddleware);
     app.use(helmet(helmetOptions));
@@ -21,6 +25,7 @@ const createApp = () => {
 
     app.use(requestLogger);
 
+    app.use(express.static(path.join(__dirname, "public")));
     initRoutes(app);
 
     app.use(notFoundHandler);
