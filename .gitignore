@@ -23,3 +23,6 @@ front/.vite/
 
 # TypeScript
 *.tsbuildinfo
+# Uploads
+back/public/uploads/*
+!back/public/uploads/.gitkeep

@@ -1,3 +1,4 @@
+import "dotenv/config";
 const requiredEnvVars = [
     "DATABASE_URL",
     "FRONTEND_URL",
