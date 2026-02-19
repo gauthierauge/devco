@@ -4,7 +4,7 @@ import { HttpError } from "../middleware/error.js"
 import { authService } from "../services/auth.service.js"
 
 // POST /api/auth/register
-const register = async (req: Request, res: Response) => {
+const registerHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body
 
     if (!email || !password) {
@@ -12,14 +12,15 @@ const register = async (req: Request, res: Response) => {
         throw new HttpError(400, "Email and password are required")
     }
 
-    const result = await authService.register(email, password)
+    const user = await authService.register(email, password);
+    (req.session as any).userId = user.id
 
-    logger.info({ userId: result.user.id }, "User registration successful")
-    res.status(201).json(result)
+    logger.info({ userId: user.id }, "User registration successful")
+    res.status(201).json(user)
 }
 
 // POST /api/auth/login
-const login = async (req: Request, res: Response) => {
+const loginHandler = async (req: Request, res: Response) => {
     const { email, password } = req.body
 
     if (!email || !password) {
@@ -27,21 +28,28 @@ const login = async (req: Request, res: Response) => {
         throw new HttpError(400, "Email and password are required")
     }
 
-    const result = await authService.login(email, password)
+    const user = await authService.login(email, password);
+    (req.session as any).userId = user.id
 
-    logger.info({ userId: result.user.id }, "User login successful")
-    res.status(200).json(result)
+    logger.info({ userId: user.id }, "User login successful")
+    res.status(200).json(user)
 }
 
 // POST /api/auth/logout
-const logout = async (req: Request, res: Response) => {
+const logoutHandler = async (req: Request, res: Response) => {
     logger.info("User logout")
-    res.status(200).json({ message: "Logged out successfully" })
+    req.session.destroy((err) => {
+        if (err) {
+            logger.error({ error: err }, "Error destroying session on logout")
+            throw new HttpError(500, "Error logging out")
+        }
+        res.status(200).json({ message: "Logged out successfully" })
+    })
 }
 
-// GET /api/auth/me (protected route - userId extraits du JWT middleware)
-const getCurrentUser = async (req: Request, res: Response) => {
-    const userId = (req as any).userId
+// GET /api/auth/me (protected route - userId extrait de la session)
+const getCurrentUserHandler = async (req: Request, res: Response) => {
+    const userId = req.userId
 
     if (!userId) {
         throw new HttpError(401, "Unauthorized")
@@ -53,5 +61,5 @@ const getCurrentUser = async (req: Request, res: Response) => {
     res.status(200).json(user)
 }
 
-export { register, login, logout, getCurrentUser }
+export { registerHandler, loginHandler, logoutHandler, getCurrentUserHandler }
 
