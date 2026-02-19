@@ -1,5 +1,10 @@
 import { Home } from "../pages/Home";
 import { Product } from "../pages/Product";
+import { Login } from "../pages/Login";
+import { Register } from "../pages/Register";
+import { Dashboard } from "../pages/Dashboard";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
 
 type Route = {
   path: RegExp;
@@ -9,6 +14,9 @@ type Route = {
 const routes: Route[] = [
   { path: /^\/$/, getView: () => Home() },
   { path: /^\/product\/(?<id>[^/]+)$/, getView: (params) => Product(params.id) },
+  { path: /^\/login$/, getView: () => Login() },
+  { path: /^\/register$/, getView: () => Register() },
+  { path: /^\/dashboard$/, getView: () => Dashboard() },
 ];
 
 const matchRoute = (pathname: string) => {
@@ -20,6 +28,17 @@ const matchRoute = (pathname: string) => {
 };
 
 const renderRoute = async () => {
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  const navbar = Navbar();
+  app.innerHTML = `
+    ${navbar.html}
+    <main id="view" class="container"></main>
+    ${Footer()}
+  `;
+  navbar.mount();
+
   const container = document.getElementById("view");
   if (!container) return;
 
