@@ -6,6 +6,8 @@ import { fileURLToPath } from "node:url";
 import { corsOptions } from "@/config/cors.js";
 import { helmetOptions } from "@/config/helmet.js";
 import { initRoutes } from "@/config/routes.js";
+import { sessionMiddleware } from "./middleware/session.js";
+import { csrfGenerateMiddleware, csrfVerifyMiddleware } from "./middleware/security/csrf.js";
 import { requestLogger } from "@/middleware/requestLogger.js";
 import { errorHandler, notFoundHandler } from "@/middleware/error.js";
 import { reportToMiddleware } from "@/middleware/security/reportTo.js";
@@ -20,11 +22,15 @@ const createApp = () => {
     app.use(express.static(path.join(__dirname, "public"), { dotfiles: "allow" }));
     app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")))
 
+    app.use(sessionMiddleware);
     app.use(express.json({ limit: "10kb" }));
     app.use(express.json({ type: "application/csp-report", limit: "5kb" }));
 
     // Sécurité headers
     app.use(cspNonceMiddleware);
+    app.use(csrfGenerateMiddleware);
+    app.use(csrfVerifyMiddleware);
+
     app.use(helmet(helmetOptions));
     app.use(reportToMiddleware);
     app.use(cors(corsOptions));
