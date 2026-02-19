@@ -8,7 +8,7 @@ const helmetOptions: HelmetOptions = {
             defaultSrc: ["'self'"],
             scriptSrc: ["'unsafe-inline'", (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as any).locals.cspNonce}'`],
             styleSrc: ["'self'"],
-            imgSrc: ["'self'", "data:", "blob:"],
+            imgSrc: ["'self'", "data:", "blob:", BACKEND_URL],
             connectSrc: ["'self'", BACKEND_URL],
             fontSrc: ["'self'"],
             objectSrc: ["'none'"],
