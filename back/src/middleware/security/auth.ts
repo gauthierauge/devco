@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express"
-import { HttpError } from "../error.js"
+import { HttpError } from "@/middleware/error.js"
 
 declare global {
     namespace Express {

@@ -1,8 +1,8 @@
-import { logger } from "../config/logger.js"
-import { HttpError } from "../middleware/error.js"
-import type { UserResponse } from "../types/auth.js"
-import { hashPassword, validatePassword } from "../utils/password.js"
-import { createUser, findUserByEmail, findUserById } from "../repositories/user.repository.js"
+import { logger } from "@/config/logger.js"
+import { HttpError } from "@/middleware/error.js"
+import type { UserResponse } from "@/types/auth.js"
+import { hashPassword, validatePassword } from "@/utils/password.js"
+import { createUser, findUserByEmail, findUserById } from "@/repositories/user.repository.js"
 
 const register = async (
     email: string,

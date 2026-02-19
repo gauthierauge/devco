@@ -1,7 +1,7 @@
 import { Request, Response } from "express"
-import { logger } from "../config/logger.js"
-import { HttpError } from "../middleware/error.js"
-import { authService } from "../services/auth.service.js"
+import { logger } from "@/config/logger.js"
+import { HttpError } from "@/middleware/error.js"
+import { authService } from "@/services/auth.service.js"
 
 // POST /api/auth/register
 const registerHandler = async (req: Request, res: Response) => {
