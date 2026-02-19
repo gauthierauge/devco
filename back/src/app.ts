@@ -18,6 +18,7 @@ const createApp = () => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
     app.use(express.static(path.join(__dirname, "public"), { dotfiles: "allow" }));
+    app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")))
 
     app.use(express.json({ limit: "10kb" }));
     app.use(express.json({ type: "application/csp-report", limit: "5kb" }));
