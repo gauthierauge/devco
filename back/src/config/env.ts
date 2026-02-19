@@ -1,3 +1,5 @@
+import "dotenv/config";
+
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 const BACKEND_PORT = Number(new URL(BACKEND_URL).port) || 5000;
 const DATABASE_URL = process.env.DATABASE_URL || "";
