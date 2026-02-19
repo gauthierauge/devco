@@ -1,7 +1,7 @@
 .PHONY: install dev dev-front dev-back \
        db db-stop db-reset db-logs \
-       prisma-generate prisma-migrate prisma-studio prisma-seed \
-       lint test test-back test-front clean
+       prisma-generate prisma-migrate prisma-migrate-create prisma-studio prisma-seed \
+       lint test clean
 
 # ── Setup ──────────────────────────────────────────────
 
@@ -65,10 +65,5 @@ lint:
 	cd back && npm run lint
 
 test:
-	$(MAKE) test-back test-front
-
-test-back:
-	cd back && npm test
-
-test-front:
 	cd front && npm test
+	cd back && npm test
