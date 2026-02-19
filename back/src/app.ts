@@ -18,9 +18,10 @@ import { xssSanitizer } from "@/middleware/security/xssSanitizer.js";
 const createApp = () => {
     const app = express();
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
+    const projectRoot = process.cwd();
 
-    app.use(express.static(path.join(__dirname, "public"), { dotfiles: "allow" }));
-    app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")))
+    app.use(express.static(path.join(projectRoot, "public"), { dotfiles: "allow" }));
+    app.use("/uploads", express.static(path.join(projectRoot, "public", "uploads")));
 
     app.use(sessionMiddleware);
     app.use(express.json({ limit: "10kb" }));
