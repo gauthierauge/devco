@@ -1,9 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { HttpError } from "../error.js"
+import { HttpError } from "@/middleware/error.js"
 import { generateCSRFToken, verifyCSRFToken, initializeCSRFSecret } from "@/utils/csrf.js"
-
-const CSRF_SECRET_KEY = "csrfSecret"
-const CSRF_TOKEN_KEY = "csrfToken"
+import {CSRF_SECRET_KEY, CSRF_TOKEN_KEY} from "@/constants/csrf.constant.js";
 
 const csrfGenerateMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const session = req.session as any
@@ -26,7 +24,7 @@ const csrfVerifyMiddleware = (req: Request, res: Response, next: NextFunction) =
 
     const session = req.session as any
     const secret = session[CSRF_SECRET_KEY]
-    const token = req.body.csrfToken || req.headers["x-csrf-token"]
+    const token = req.body?.csrfToken || req.headers["x-csrf-token"]
 
     if (!secret) {
         throw new HttpError(403, "CSRF secret not found in session")

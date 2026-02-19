@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-import { listProducts, getProductById, createProduct, updateProduct, deleteProduct } from "../services/productService.js";
-import type { UploadedFile } from "../middleware/upload.js";
+import { listProducts, getProductById, createProduct, updateProduct, deleteProduct } from "@/services/product.service.js";
+import type { UploadedFile } from "@/middleware/upload.js";
 
 const parsePrice = (value: unknown) => {
   const parsed = Number(value);

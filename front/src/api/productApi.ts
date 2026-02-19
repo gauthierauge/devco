@@ -1,4 +1,4 @@
-import { API_URL } from "../config/env";
+import { BASE_URL } from "../constants/api.constant";
 import { request } from "./client";
 
 export type ProductDto = {
@@ -12,7 +12,7 @@ export type ProductDto = {
   updatedAt: string;
 };
 
-const baseUrl = `${API_URL}/api/v1/products`;
+const baseUrl = `${BASE_URL}/products`;
 
 const listProducts = (query?: { q?: string; category?: string }) => {
   const params = new URLSearchParams();
