@@ -12,7 +12,7 @@ export type ProductDto = {
   updatedAt: string;
 };
 
-const baseUrl = `${API_URL}/api/products`;
+const baseUrl = `${API_URL}/api/v1/products`;
 
 const listProducts = (query?: { q?: string; category?: string }) => {
   const params = new URLSearchParams();
