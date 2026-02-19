@@ -1,7 +1,7 @@
 import cors from "cors";
 import {FRONTEND_URL} from "@/config/env.js";
 
-const allowedOrigin = FRONTEND_URL ?? "http://localhost:3000";
+const allowedOrigin = (FRONTEND_URL ?? "http://localhost:3000").replace(/\/$/, "");
 
 const corsOptions: cors.CorsOptions = {
     origin: allowedOrigin,
