@@ -1,14 +1,13 @@
 import { logger } from "../config/logger.js"
 import { HttpError } from "../middleware/error.js"
-import type { AuthResponse, UserResponse } from "../types/auth.js"
+import type { UserResponse } from "../types/auth.js"
 import { hashPassword, validatePassword } from "../utils/password.js"
-import { generateToken, verifyToken } from "../utils/jwt.js"
 import { createUser, findUserByEmail, findUserById } from "../repositories/user.repository.js"
 
 const register = async (
     email: string,
     password: string
-): Promise<AuthResponse> => {
+): Promise<UserResponse> => {
     const existingUser = await findUserByEmail(email)
     if (existingUser) {
         logger.warn({ email }, "Registration attempt with already existing email")
@@ -25,17 +24,13 @@ const register = async (
 
     logger.info({ userId: user.id, email }, "User registered successfully")
 
-    const access_token = generateToken(user.id)
     return {
-        access_token,
-        user: {
-            id: user.id,
-            email: user.email,
-        },
+        id: user.id,
+        email: user.email,
     }
 }
 
-const login = async (email: string, password: string): Promise<AuthResponse> => {
+const login = async (email: string, password: string): Promise<UserResponse> => {
     const user = await findUserByEmail(email)
     if (!user) {
         logger.warn({ email }, "Login attempt with non-existent email")
@@ -50,13 +45,9 @@ const login = async (email: string, password: string): Promise<AuthResponse> => 
 
     logger.info({ userId: user.id, email }, "User logged in successfully")
 
-    const access_token = generateToken(user.id)
     return {
-        access_token,
-        user: {
-            id: user.id,
-            email: user.email,
-        },
+        id: user.id,
+        email: user.email,
     }
 }
 
@@ -77,7 +68,5 @@ export const authService = {
     register,
     login,
     validatePassword,
-    generateToken,
-    verifyToken,
     getCurrentUser,
 }
