@@ -1,6 +1,6 @@
 import session, { Store } from "express-session"
-import { prisma } from "../config/db.js"
-import { logger } from "../config/logger.js"
+import { prisma } from "@/config/db.js"
+import { logger } from "@/config/logger.js"
 
 class PrismaStore extends Store {
     async get(sid: string, callback: (err?: any, session?: any) => void) {

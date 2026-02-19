@@ -1,10 +1,10 @@
 import request from "supertest";
-import { createApp } from "../app.js";
-import { prisma } from "../config/db.js";
+import { createApp } from "@/app.js";
+import { prisma } from "@/config/db.js";
 import path from "node:path";
 
 const app = createApp();
-const fixture = path.join(process.cwd(), "src", "__tests__", "fixtures", "test.jpg");
+const fixture = path.join(process.cwd(), "tests", "fixtures", "test.jpg");
 
 describe("Products CRUD", () => {
   beforeAll(async () => {
@@ -22,14 +22,14 @@ describe("Products CRUD", () => {
   test("create, list, get, update, delete", async () => {
     const createRes = await request(app)
       .post("/api/products")
-      .field("label", "Lampe Céramique Sable")
-      .field("description", "Lampe artisanale à lumière douce")
+      .field("label", "Lampe Cï¿½ramique Sable")
+      .field("description", "Lampe artisanale ï¿½ lumiï¿½re douce")
       .field("category", "Luminaires")
       .field("price", "89.90")
       .attach("images", fixture);
 
     expect(createRes.status).toBe(201);
-    expect(createRes.body.label).toBe("Lampe Céramique Sable");
+    expect(createRes.body.label).toBe("Lampe Cï¿½ramique Sable");
     expect(createRes.body.images.length).toBeGreaterThan(0);
 
     const id = createRes.body.id;
@@ -44,12 +44,12 @@ describe("Products CRUD", () => {
 
     const updateRes = await request(app)
       .put(`/api/products/${id}`)
-      .field("label", "Lampe Céramique Sable - Édition limitée")
+      .field("label", "Lampe Cï¿½ramique Sable - ï¿½dition limitï¿½e")
       .field("price", "99.90")
       .attach("images", fixture);
 
     expect(updateRes.status).toBe(200);
-    expect(updateRes.body.label).toContain("Édition limitée");
+    expect(updateRes.body.label).toContain("ï¿½dition limitï¿½e");
 
     const deleteRes = await request(app).delete(`/api/products/${id}`);
     expect(deleteRes.status).toBe(204);
