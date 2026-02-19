@@ -1,4 +1,15 @@
 import "dotenv/config";
+const requiredEnvVars = [
+    "DATABASE_URL",
+    "FRONTEND_URL",
+    "BACKEND_URL",
+] as const;
+
+const missingVars = requiredEnvVars.filter((key) => !process.env[key])
+
+if (missingVars.length > 0) {
+    throw new Error(`Variables d'environnement manquantes : ${missingVars.join(", ")}`)
+}
 
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:5000";
 const BACKEND_PORT = Number(new URL(BACKEND_URL).port) || 5000;

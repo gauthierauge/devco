@@ -2,6 +2,7 @@
        db db-stop db-reset db-logs \
        prisma-generate prisma-migrate prisma-studio prisma-seed \
        lint test clean
+       lint test test-back test-front clean
 
 # ── Setup ──────────────────────────────────────────────
 

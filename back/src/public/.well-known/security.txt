@@ -1,0 +1,5 @@
+Contact: mailto:contact-devco@example.fr
+Expires: 2027-02-19T11:00:00.000Z
+Preferred-Languages: fr
+Canonical: http://localhost:5000/.well-known/security.txt
+Policy: http://localhost:5000/security-policy.html

@@ -1,8 +1,9 @@
-import { Express } from "express";
-import { productRoutes } from "../routes/productRoutes.js";
+import { Express } from "express"
+import {cspReportRouter} from "@/routes/cspReport.route.js";
+import {API_PREFIX} from "@/constants/api.constant.js";
 
 const initRoutes = (app: Express) => {
-  app.use("/api", productRoutes);
+    app.use(API_PREFIX, cspReportRouter);
 };
 
-export { initRoutes };
+export { API_PREFIX, initRoutes };

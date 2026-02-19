@@ -1,5 +1,5 @@
 import cors from "cors";
-import {FRONTEND_URL} from "./env.js";
+import {FRONTEND_URL} from "@/config/env.js";
 
 const allowedOrigin = FRONTEND_URL ?? "http://localhost:3000";
 

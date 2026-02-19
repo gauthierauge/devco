@@ -1,6 +1,6 @@
 import { Request, Response, NextFunction } from "express";
-import type { ApiError } from "../types/error.js";
-import { logger } from "../config/logger.js";
+import type { ApiError } from "@/types/error.js";
+import { logger } from "@/config/logger.js";
 
 class HttpError extends Error {
     readonly statusCode: number

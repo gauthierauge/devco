@@ -1,19 +1,23 @@
 import { HelmetOptions } from "helmet"
+import { IncomingMessage, ServerResponse } from "http"
+import { BACKEND_URL } from "@/config/env.js"
 
 const helmetOptions: HelmetOptions = {
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'self'"],
-            styleSrc: ["'self'", "'unsafe-inline'"],
+            scriptSrc: ["'unsafe-inline'", (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as any).locals.cspNonce}'`],
+            styleSrc: ["'self'"],
             imgSrc: ["'self'", "data:", "blob:"],
-            connectSrc: ["'self'"],
+            connectSrc: ["'self'", BACKEND_URL],
             fontSrc: ["'self'"],
             objectSrc: ["'none'"],
             frameAncestors: ["'none'"],
             baseUri: ["'self'"],
             formAction: ["'self'"],
-            reportUri: "/csp-report",
+            requireTrustedTypesFor: ["'script'"],
+            reportUri: "/api/v1/csp-report",
+            reportTo: "csp-endpoint",
         },
     },
     crossOriginEmbedderPolicy: false,
@@ -23,6 +27,6 @@ const helmetOptions: HelmetOptions = {
         includeSubDomains: true,
         preload: true,
     },
-};
+}
 
-export { helmetOptions };
+export { helmetOptions }
