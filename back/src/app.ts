@@ -1,20 +1,4 @@
 import express from "express";
-import path from "node:path";
-import helmet from "helmet";
-import cors from "cors";
-import { corsOptions } from "./config/cors.js";
-import { helmetOptions } from "./config/helmet.js";
-import {initRoutes} from "./config/routes.js";
-import {requestLogger} from "./middleware/requestLogger.js";
-import {errorHandler, notFoundHandler} from "./middleware/error.js";
-
-const createApp = () => {
-    const app = express();
-
-    app.use(helmet(helmetOptions));
-    app.use(cors(corsOptions));
-    app.use(express.json());
-    app.use("/uploads", express.static(path.join(process.cwd(), "public", "uploads")));
 import helmet from "helmet";
 import cors from "cors";
 import path from "node:path";
@@ -34,6 +18,7 @@ const createApp = () => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
     app.use(express.static(path.join(__dirname, "public"), { dotfiles: "allow" }));
+    app.use("/uploads", express.static(path.join(__dirname, "..", "uploads")))
 
     app.use(express.json({ limit: "10kb" }));
     app.use(express.json({ type: "application/csp-report", limit: "5kb" }));
