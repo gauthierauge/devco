@@ -21,10 +21,11 @@ const login = async (email: string, password: string): Promise<AuthResponse> =>
         headers: { "Content-Type": "application/json" },
     });
 
-const logout = async (): Promise<void> =>
-    request<void>(`${BASE_URL}/auth/logout`, {
+const logout = async (): Promise<void> => {
+    await request<void>(`${BASE_URL}/auth/logout`, {
         method: "POST",
-    }).then(() => undefined);
+    });
+};
 
 const getCurrentUser = async (): Promise<AuthResponse | null> => {
     try {

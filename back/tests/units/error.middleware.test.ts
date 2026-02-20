@@ -88,7 +88,7 @@ describe("errorHandler", () => {
         expect(res.json).toHaveBeenCalledWith({ error: "Validation failed" })
     })
 
-    it("retourne 500 pour une Error standard", () => {
+    it("retourne 500 avec message generique pour une Error standard", () => {
         const err = new Error("Something broke")
         const req = {} as Request
         const res = mockRes()
@@ -97,7 +97,7 @@ describe("errorHandler", () => {
         errorHandler(err, req, res, next)
 
         expect(res.status).toHaveBeenCalledWith(500)
-        expect(res.json).toHaveBeenCalledWith({ error: "Something broke" })
+        expect(res.json).toHaveBeenCalledWith({ error: "Erreur interne du serveur" })
     })
 
     it("log error pour les codes 500+", () => {

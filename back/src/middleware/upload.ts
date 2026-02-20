@@ -89,67 +89,71 @@ const parseMultipart = (req: Request) => {
     });
     req.on("error", reject);
     req.on("end", () => {
-      const buffer = Buffer.concat(chunks);
-      const parts = buffer
-        .toString("latin1")
-        .split(boundary)
-        .slice(1, -1);
+      try {
+        const buffer = Buffer.concat(chunks);
+        const parts = buffer
+          .toString("latin1")
+          .split(boundary)
+          .slice(1, -1);
 
-      const fields: Record<string, string> = {};
-      const files: UploadedFile[] = [];
+        const fields: Record<string, string> = {};
+        const files: UploadedFile[] = [];
 
-      for (const part of parts) {
-        const [rawHeaders, rawBody] = part.split("\r\n\r\n");
-        if (!rawHeaders || !rawBody) continue;
+        for (const part of parts) {
+          const [rawHeaders, rawBody] = part.split("\r\n\r\n");
+          if (!rawHeaders || !rawBody) continue;
 
-        const headers = rawHeaders.split("\r\n").filter(Boolean);
-        const disposition = headers.find((h) => h.toLowerCase().startsWith("content-disposition"));
-        if (!disposition) continue;
+          const headers = rawHeaders.split("\r\n").filter(Boolean);
+          const disposition = headers.find((h) => h.toLowerCase().startsWith("content-disposition"));
+          if (!disposition) continue;
 
-        const nameMatch = disposition.match(/name="([^"]+)"/i);
-        if (!nameMatch) continue;
-        const fieldName = nameMatch[1];
+          const nameMatch = disposition.match(/name="([^"]+)"/i);
+          if (!nameMatch) continue;
+          const fieldName = nameMatch[1];
 
-        const filenameMatch = disposition.match(/filename="([^"]*)"/i);
-        const contentTypeHeader = headers.find((h) => h.toLowerCase().startsWith("content-type"));
-        const mimetype = contentTypeHeader?.split(":")[1]?.trim() || "";
+          const filenameMatch = disposition.match(/filename="([^"]*)"/i);
+          const contentTypeHeader = headers.find((h) => h.toLowerCase().startsWith("content-type"));
+          const mimetype = contentTypeHeader?.split(":")[1]?.trim() || "";
 
-        const body = rawBody.slice(0, -2);
+          const body = rawBody.slice(0, -2);
 
-        if (filenameMatch && filenameMatch[1]) {
-          if (!ALLOWED_MIME.includes(mimetype)) {
-            throw new Error("Invalid image type");
+          if (filenameMatch && filenameMatch[1]) {
+            if (!ALLOWED_MIME.includes(mimetype)) {
+              throw new Error("Invalid image type");
+            }
+
+            const fileBuffer = Buffer.from(body, "latin1");
+            if (fileBuffer.length > MAX_FILE_SIZE) {
+              throw new Error("File too large");
+            }
+
+            const detectedMime = detectMime(fileBuffer);
+            if (!detectedMime || !ALLOWED_MIME.includes(detectedMime)) {
+              throw new Error("Invalid image content");
+            }
+
+            if (detectedMime !== mimetype) {
+              throw new Error("Mimetype mismatch");
+            }
+
+            if (files.length >= MAX_FILES) {
+              throw new Error("Too many files");
+            }
+
+            ensureUploadsDir();
+            const ext = extensionFromMime(detectedMime);
+            const filename = `${randomUUID()}${ext}`;
+            fs.writeFileSync(path.join(uploadsDir, filename), fileBuffer);
+            files.push({ filename, mimetype: detectedMime, size: fileBuffer.length });
+          } else {
+            fields[fieldName] = Buffer.from(body, "latin1").toString("utf8");
           }
-
-          const fileBuffer = Buffer.from(body, "latin1");
-          if (fileBuffer.length > MAX_FILE_SIZE) {
-            throw new Error("File too large");
-          }
-
-          const detectedMime = detectMime(fileBuffer);
-          if (!detectedMime || !ALLOWED_MIME.includes(detectedMime)) {
-            throw new Error("Invalid image content");
-          }
-
-          if (detectedMime !== mimetype) {
-            throw new Error("Mimetype mismatch");
-          }
-
-          if (files.length >= MAX_FILES) {
-            throw new Error("Too many files");
-          }
-
-          ensureUploadsDir();
-          const ext = extensionFromMime(detectedMime);
-          const filename = `${randomUUID()}${ext}`;
-          fs.writeFileSync(path.join(uploadsDir, filename), fileBuffer);
-          files.push({ filename, mimetype: detectedMime, size: fileBuffer.length });
-        } else {
-          fields[fieldName] = Buffer.from(body, "latin1").toString("utf8");
         }
-      }
 
-      resolve({ fields, files });
+        resolve({ fields, files });
+      } catch (err) {
+        reject(err);
+      }
     });
   });
 };

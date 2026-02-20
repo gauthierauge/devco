@@ -1,7 +1,9 @@
 import { authService } from "../services/authService";
+import { cartService } from "../services/cartService";
 
 const Navbar = () => {
   const user = authService.getCurrentUser();
+  const cartCount = cartService.getCount();
 
   const authLinks = user
     ? `
@@ -16,6 +18,16 @@ const Navbar = () => {
       <a href="/csp-reports" data-link>CSP Reports</a>
     `;
 
+  const cartLink = `
+    <a href="/cart" data-link class="cart-link" style="position: relative;">
+      Panier
+      ${cartCount > 0
+      ? `<span class="cart-badge" style="position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: bold;">${cartCount}</span>`
+      : ""
+    }
+    </a>
+  `;
+
   const navHtml = `
     <nav class="navbar">
       <div class="brand"><a href="/" data-link>Maison Déco</a></div>
@@ -23,6 +35,7 @@ const Navbar = () => {
         <a href="/" data-link>Produits</a>
         <a href="/stats" data-link>Statistiques</a>
         ${authLinks}
+        ${cartLink}
       </div>
     </nav>
   `;

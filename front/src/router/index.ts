@@ -5,6 +5,7 @@ import { Stats } from "../pages/Stats";
 import { Login } from "../pages/Login";
 import { Register } from "../pages/Register";
 import { Dashboard } from "../pages/Dashboard";
+import { Cart } from "../pages/Cart";
 import { Navbar } from "../components/Navbar";
 import { Footer } from "../components/Footer";
 import { checkRouteAccess } from "./protect";
@@ -22,6 +23,7 @@ const routes: Route[] = [
   { path: /^\/login$/, getView: () => Login() },
   { path: /^\/register$/, getView: () => Register() },
   { path: /^\/dashboard$/, getView: () => Dashboard() },
+  { path: /^\/cart$/, getView: () => Cart() },
 ];
 
 const matchRoute = (pathname: string) => {
@@ -38,7 +40,7 @@ const renderRoute = async () => {
   const redirect = checkRouteAccess(pathname);
   if (redirect) {
     window.history.pushState({}, "", redirect);
-    renderRoute();
+    await renderRoute();
     return;
   }
 
@@ -71,12 +73,12 @@ const initRouter = () => {
     if (!link) return;
     event.preventDefault();
     window.history.pushState({}, "", link.href);
-    renderRoute();
+    void renderRoute();
   });
 
-  window.addEventListener("popstate", renderRoute);
+  window.addEventListener("popstate", () => void renderRoute());
 
-  renderRoute();
+  void renderRoute();
 };
 
 export { initRouter };

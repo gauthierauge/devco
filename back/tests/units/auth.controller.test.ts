@@ -96,6 +96,14 @@ describe("logoutHandler", () => {
         expect(res.status).toHaveBeenCalledWith(200)
         expect(res.json).toHaveBeenCalledWith({ message: "Logged out successfully" })
     })
+
+    it("throw si la destruction de session echoue", async () => {
+        const destroyFn = jest.fn<any>((cb: (err?: Error) => void) => cb(new Error("session error")))
+        const req = { session: { destroy: destroyFn } } as unknown as Request
+        const res = mockRes()
+
+        await expect(logoutHandler(req, res)).rejects.toThrow("session error")
+    })
 })
 
 describe("getCurrentUserHandler", () => {
