@@ -1,6 +1,7 @@
 ﻿import { listProducts, createProduct, updateProduct, deleteProduct } from "../api/productApi";
 import { SearchBar } from "../components/SearchBar";
-import { presentProductCard } from "../mappers/productPresenter";
+import { ProductCard } from "../components/ProductCard";
+import { toProductCardView } from "../mappers/productPresenter";
 import { filterProducts, toView } from "../services/productService";
 
 type HomeState = {
@@ -63,7 +64,7 @@ const renderForm = (state: HomeState) => {
 
 const renderList = (state: HomeState) => {
   const filtered = filterProducts(state.products, state.query).map(toView);
-  const cards = filtered.map(presentProductCard).join("");
+  const cards = filtered.map(toProductCardView).map(ProductCard).join("");
   return `
       <section class="panel">
         <div class="panel-header">
@@ -111,7 +112,7 @@ const Home = () => {
       const grid = document.getElementById("product-grid");
       if (!grid) return;
       const filtered = filterProducts(state.products, state.query).map(toView);
-      const cards = filtered.map(presentProductCard).join("");
+      const cards = filtered.map(toProductCardView).map(ProductCard).join("");
       grid.innerHTML = cards || "<p>Aucun produit.</p>";
     });
 
