@@ -38,16 +38,13 @@ const loginHandler = async (req: Request, res: Response) => {
 // POST /api/auth/logout
 const logoutHandler = async (req: Request, res: Response) => {
     logger.info("User logout")
-    req.session.destroy((err) => {
-        if (err) {
-            logger.error({ error: err }, "Error destroying session on logout")
-            throw new HttpError(500, "Error logging out")
-        }
-        res.status(200).json({ message: "Logged out successfully" })
+    await new Promise<void>((resolve, reject) => {
+        req.session.destroy((err) => err ? reject(err) : resolve())
     })
+    res.status(200).json({ message: "Logged out successfully" })
 }
 
-// GET /api/auth/me (protected route - userId extrait de la session)
+// GET /api/auth/me
 const getCurrentUserHandler = async (req: Request, res: Response) => {
     const userId = req.userId
 

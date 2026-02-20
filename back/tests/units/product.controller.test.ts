@@ -18,6 +18,9 @@ jest.unstable_mockModule("@/repositories/product.repository.js", () => ({
     deleteProduct: jest.fn(),
 }))
 jest.unstable_mockModule("@/services/product.service.js", () => mockedService)
+jest.unstable_mockModule("@/config/logger.js", () => ({
+    logger: { info: jest.fn(), debug: jest.fn(), warn: jest.fn(), error: jest.fn() },
+}))
 
 const { list, getById, create, update, remove } = await import("@/controllers/product.controller.js")
 
@@ -111,6 +114,7 @@ describe("update", () => {
     beforeEach(() => jest.clearAllMocks())
 
     it("retourne 400 si le prix est pas valide", async () => {
+        mockedService.getProductById.mockResolvedValue(fakeProduct)
         const req = { params: { id: "1" }, body: { price: "not-a-number" }, files: [] } as unknown as Request
         const res = mockRes()
 
@@ -120,15 +124,12 @@ describe("update", () => {
         expect(res.json).toHaveBeenCalledWith({ message: "Invalid price" })
     })
 
-    it("retourne 404 si le produit existe pas", async () => {
-        mockedService.updateProduct.mockRejectedValue(new Error("Not found"))
+    it("throw 404 si le produit existe pas", async () => {
+        mockedService.getProductById.mockResolvedValue(null)
         const req = { params: { id: "999" }, body: { label: "Updated" } } as unknown as Request
         const res = mockRes()
 
-        await update(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(404)
-        expect(res.json).toHaveBeenCalledWith({ message: "Product not found" })
+        await expect(update(req, res)).rejects.toThrow("Product not found")
     })
 })
 
@@ -136,6 +137,7 @@ describe("remove", () => {
     beforeEach(() => jest.clearAllMocks())
 
     it("retourne 204 si supprimé", async () => {
+        mockedService.getProductById.mockResolvedValue(fakeProduct)
         mockedService.deleteProduct.mockResolvedValue(fakeProduct)
         const req = { params: { id: "1" } } as unknown as Request
         const res = mockRes()
@@ -146,14 +148,11 @@ describe("remove", () => {
         expect(res.send).toHaveBeenCalled()
     })
 
-    it("retourne 404 si produit existe pas", async () => {
-        mockedService.deleteProduct.mockRejectedValue(new Error("Not found"))
+    it("throw 404 si produit existe pas", async () => {
+        mockedService.getProductById.mockResolvedValue(null)
         const req = { params: { id: "999" } } as unknown as Request
         const res = mockRes()
 
-        await remove(req, res)
-
-        expect(res.status).toHaveBeenCalledWith(404)
-        expect(res.json).toHaveBeenCalledWith({ message: "Product not found" })
+        await expect(remove(req, res)).rejects.toThrow("Product not found")
     })
 })

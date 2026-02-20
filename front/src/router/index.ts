@@ -38,7 +38,7 @@ const renderRoute = async () => {
   const redirect = checkRouteAccess(pathname);
   if (redirect) {
     window.history.pushState({}, "", redirect);
-    renderRoute();
+    await renderRoute();
     return;
   }
 
@@ -71,12 +71,12 @@ const initRouter = () => {
     if (!link) return;
     event.preventDefault();
     window.history.pushState({}, "", link.href);
-    renderRoute();
+    void renderRoute();
   });
 
-  window.addEventListener("popstate", renderRoute);
+  window.addEventListener("popstate", () => void renderRoute());
 
-  renderRoute();
+  void renderRoute();
 };
 
 export { initRouter };

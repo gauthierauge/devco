@@ -28,15 +28,16 @@ const errorHandler = (
     _next: NextFunction,
 ) => {
     const statusCode = err instanceof HttpError ? err.statusCode : 500
-    const message = err.message || "Erreur interne du serveur"
 
     if (statusCode >= 500) {
-        logger.error({ err, statusCode }, message)
+        logger.error({ err, statusCode }, err.message)
     } else {
-        logger.warn({ statusCode }, message)
+        logger.warn({ statusCode }, err.message)
     }
 
-    const body: ApiError = { error: message }
+    const body: ApiError = {
+        error: statusCode >= 500 ? "Erreur interne du serveur" : err.message,
+    }
 
     res.status(statusCode).json(body)
 }
