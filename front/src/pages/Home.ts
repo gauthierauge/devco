@@ -9,12 +9,14 @@ type HomeState = {
   products: Awaited<ReturnType<typeof listProducts>>;
   query: string;
   editingId: string | null;
+  searchTimeout: number | null;
 };
 
 const initialState: HomeState = {
   products: [],
   query: "",
   editingId: null,
+  searchTimeout: null,
 };
 
 const setState = (state: HomeState, patch: Partial<HomeState>): HomeState => ({
@@ -56,7 +58,19 @@ const renderForm = (state: HomeState) => {
         </label>
         <label>
           Images
-          <input name="images" type="file" accept="image/*" multiple ${state.editingId ? "" : "required"} />
+          <label class="dropzone" id="image-dropzone">
+            <input
+              name="images"
+              type="file"
+              accept="image/*"
+              multiple
+              class="dropzone-input"
+              ${state.editingId ? "" : "required"}
+            />
+            <span class="dropzone-text">Déposez vos images</span>
+            <span class="dropzone-subtext">ou cliquez pour sélectionner</span>
+            <span class="dropzone-files" id="dropzone-files">Aucune image sélectionnée</span>
+          </label>
         </label>
         <div class="form-actions">
           <button class="btn" type="submit">${state.editingId ? "Mettre à jour" : "Créer"}</button>
@@ -130,16 +144,23 @@ const Home = () => {
   const bind = () => {
     const searchInput = document.getElementById("search-input") as HTMLInputElement | null;
     searchInput?.addEventListener("input", () => {
-      state = setState(state, { query: searchInput.value });
-      const grid = document.getElementById("product-grid");
-      if (!grid) return;
-      const filtered = filterProducts(state.products, state.query).map(toView);
-      const canManage = authService.isLoggedIn();
-      const cards = filtered
-        .map(toProductCardView)
-        .map((product) => ProductCard({ ...product, canManage }))
-        .join("");
-      grid.innerHTML = cards || "<p>Aucun produit.</p>";
+      const value = searchInput.value;
+      if (state.searchTimeout) {
+        window.clearTimeout(state.searchTimeout);
+      }
+      const timeout = window.setTimeout(() => {
+        state = setState(state, { query: value });
+        const grid = document.getElementById("product-grid");
+        if (!grid) return;
+        const filtered = filterProducts(state.products, state.query).map(toView);
+        const canManage = authService.isLoggedIn();
+        const cards = filtered
+          .map(toProductCardView)
+          .map((product) => ProductCard({ ...product, canManage }))
+          .join("");
+        grid.innerHTML = cards || "<p>Aucun produit.</p>";
+      }, 500);
+      state = setState(state, { searchTimeout: timeout });
     });
 
     const form = document.getElementById("product-form") as HTMLFormElement | null;
@@ -184,6 +205,46 @@ const Home = () => {
     document.getElementById("reset-form")?.addEventListener("click", () => {
       state = setState(state, { editingId: null });
       repaint();
+    });
+
+    const dropzone = document.getElementById("image-dropzone") as HTMLLabelElement | null;
+    const dropzoneFiles = document.getElementById("dropzone-files") as HTMLSpanElement | null;
+    const dropzoneInput = dropzone?.querySelector<HTMLInputElement>('input[name="images"]') ?? null;
+
+    const updateDropzone = (files: File[]) => {
+      if (!dropzoneFiles) return;
+      if (files.length === 0) {
+        dropzoneFiles.textContent = "Aucune image sélectionnée";
+        return;
+      }
+      dropzoneFiles.textContent =
+        files.length === 1 ? files[0].name : `${files.length} images sélectionnées`;
+    };
+
+    dropzoneInput?.addEventListener("change", () => {
+      const files = dropzoneInput.files ? Array.from(dropzoneInput.files) : [];
+      updateDropzone(files);
+    });
+
+    dropzone?.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      dropzone.classList.add("is-dragging");
+    });
+
+    dropzone?.addEventListener("dragleave", () => {
+      dropzone.classList.remove("is-dragging");
+    });
+
+    dropzone?.addEventListener("drop", (event) => {
+      event.preventDefault();
+      dropzone.classList.remove("is-dragging");
+      if (!dropzoneInput) return;
+      const files = Array.from(event.dataTransfer?.files ?? []);
+      if (files.length === 0) return;
+      const dataTransfer = new DataTransfer();
+      files.forEach((file) => dataTransfer.items.add(file));
+      dropzoneInput.files = dataTransfer.files;
+      updateDropzone(files);
     });
 
     document.querySelectorAll("[data-action]").forEach((el) => {
