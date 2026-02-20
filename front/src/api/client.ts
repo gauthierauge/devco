@@ -6,6 +6,7 @@ type RequestOptions = {
   method?: HttpMethod;
   body?: BodyInit | null;
   headers?: Record<string, string>;
+  credentials?: RequestCredentials;
 };
 
 let csrfToken: string | null = null;
@@ -27,8 +28,9 @@ const fetchCsrfToken = async (): Promise<string> => {
 const request = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
   const method = options.method ?? "GET";
   const headers: Record<string, string> = { ...options.headers };
+  const credentials = options.credentials ?? "include";
 
-  if (method !== "GET") {
+  if (method !== "GET" && credentials !== "omit") {
     headers["x-csrf-token"] = await fetchCsrfToken();
   }
 
@@ -36,7 +38,7 @@ const request = async <T>(url: string, options: RequestOptions = {}): Promise<T>
     method,
     body: options.body ?? null,
     headers,
-    credentials: "include",
+    credentials,
   });
 
   if (res.status === 403) {

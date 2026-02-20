@@ -117,3 +117,55 @@ body {
 .product-gallery img {
   @apply rounded-xl object-cover h-48 w-full;
 }
+
+.stat-panel {
+  @apply flex flex-col gap-6;
+}
+
+.stat-summary {
+  @apply flex flex-wrap items-center justify-between gap-4 border border-neutral-100 rounded-xl p-4 bg-neutral-50;
+}
+
+.stat-label {
+  @apply text-sm text-neutral-500;
+}
+
+.stat-total {
+  @apply text-3xl font-semibold;
+}
+
+.stat-badge {
+  @apply text-xs font-semibold uppercase tracking-wide bg-neutral-900 text-white rounded-full px-3 py-1;
+}
+
+.stat-list {
+  @apply flex flex-col gap-4;
+}
+
+.stat-item {
+  @apply bg-white border border-neutral-100 rounded-xl p-4;
+}
+
+.stat-row {
+  @apply flex items-center justify-between text-sm font-medium;
+}
+
+.stat-name {
+  @apply text-neutral-900;
+}
+
+.stat-count {
+  @apply text-neutral-600;
+}
+
+.stat-bar {
+  @apply mt-3 h-2 w-full rounded-full bg-neutral-100 overflow-hidden;
+}
+
+.stat-bar span {
+  @apply block h-full rounded-full bg-neutral-900;
+}
+
+.stat-error {
+  @apply text-sm text-red-600;
+}
