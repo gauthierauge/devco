@@ -28,10 +28,10 @@ describe("checkRouteAccess", () => {
         expect(checkRouteAccess("/csp-reports")).toBe("/login");
     });
 
-    it("redirige vers /dashboard si route auth-only et connecté", () => {
+    it("redirige vers / si route auth-only et connecté", () => {
         mockIsLoggedIn.mockReturnValue(true);
-        expect(checkRouteAccess("/login")).toBe("/dashboard");
-        expect(checkRouteAccess("/register")).toBe("/dashboard");
+        expect(checkRouteAccess("/login")).toBe("/");
+        expect(checkRouteAccess("/register")).toBe("/");
     });
 
     it("retourne null si route protégée et connecté", () => {

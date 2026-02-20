@@ -17,9 +17,9 @@ describe("presentCspReportRow", () => {
         expect(html).toContain("<tr>");
         expect(html).toContain("</tr>");
         expect(html).toContain("<td>script-src</td>");
-        expect(html).toContain("<td>https://example.com</td>");
-        expect(html).toContain("<td>https://evil.com</td>");
-        expect(html).toContain("<td>15/06/2024 12:30:00</td>");
+        expect(html).toContain("https://example.com</td>");
+        expect(html).toContain("https://evil.com</td>");
+        expect(html).toContain("15/06/2024 12:30:00</td>");
     });
 });
 

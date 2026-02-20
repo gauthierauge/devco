@@ -3,9 +3,9 @@ import type { CspReportView } from "../services/cspReportService";
 const presentCspReportRow = (report: CspReportView): string => `
       <tr>
         <td>${report.violatedDirective}</td>
-        <td>${report.documentUri}</td>
-        <td>${report.blockedUri}</td>
-        <td>${report.date}</td>
+        <td class="csp-uri">${report.documentUri}</td>
+        <td class="csp-uri">${report.blockedUri}</td>
+        <td class="csp-date">${report.date}</td>
       </tr>`;
 
 const presentCspReportTable = (reports: CspReportView[]): string => {
@@ -16,17 +16,22 @@ const presentCspReportTable = (reports: CspReportView[]): string => {
   const rows = reports.map(presentCspReportRow).join("");
 
   return `
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Directive violée</th>
-          <th>Document URI</th>
-          <th>Blocked URI</th>
-          <th>Date</th>
-        </tr>
-      </thead>
-      <tbody>${rows}</tbody>
-    </table>`;
+    <div class="csp-summary">
+      <span class="csp-count">${reports.length} violation${reports.length > 1 ? "s" : ""}</span>
+    </div>
+    <div class="csp-table-wrapper">
+      <table class="csp-table">
+        <thead>
+          <tr>
+            <th>Directive violée</th>
+            <th>Document URI</th>
+            <th>Blocked URI</th>
+            <th>Date</th>
+          </tr>
+        </thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 };
 
 export { presentCspReportRow, presentCspReportTable };

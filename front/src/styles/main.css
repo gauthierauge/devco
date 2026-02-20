@@ -274,6 +274,55 @@ body {
   @apply text-sm text-red-600;
 }
 
+/* CSP Reports */
+.csp-summary {
+  @apply flex items-center justify-between mb-4;
+}
+
+.csp-count {
+  @apply text-sm font-semibold text-neutral-600;
+}
+
+.csp-table-wrapper {
+  @apply overflow-x-auto rounded-xl border border-neutral-200;
+}
+
+.csp-table {
+  @apply w-full text-sm;
+}
+
+.csp-table thead {
+  @apply bg-neutral-900 text-white;
+}
+
+.csp-table th {
+  @apply px-4 py-3 text-left font-medium text-xs uppercase tracking-wide;
+}
+
+.csp-table td {
+  @apply px-4 py-3 text-neutral-700;
+}
+
+.csp-table tbody tr {
+  @apply border-t border-neutral-100;
+}
+
+.csp-table tbody tr:nth-child(even) {
+  @apply bg-neutral-50;
+}
+
+.csp-table tbody tr:hover {
+  @apply bg-neutral-100;
+}
+
+.csp-uri {
+  @apply font-mono text-xs break-all max-w-[240px];
+}
+
+.csp-date {
+  @apply whitespace-nowrap text-neutral-500;
+}
+
 /* Auth Pages */
 .auth-container {
   @apply flex items-center justify-center min-h-screen;
