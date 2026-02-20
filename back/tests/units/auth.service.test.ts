@@ -30,9 +30,9 @@ describe("register", () => {
         mockPassword.hashPassword.mockResolvedValue("hashed123")
         mockRepo.createUser.mockResolvedValue({ id: 1, email: "test@test.com", password: "hashed123", createdAt: now, updatedAt: now })
 
-        const result = await authService.register("test@test.com", "password123")
+        const result = await authService.register("test@test.com", "securePassword!1")
 
-        expect(mockPassword.hashPassword).toHaveBeenCalledWith("password123")
+        expect(mockPassword.hashPassword).toHaveBeenCalledWith("securePassword!1")
         expect(mockRepo.createUser).toHaveBeenCalledWith("test@test.com", "hashed123")
         expect(result).toEqual({ id: 1, email: "test@test.com" })
     })
@@ -44,11 +44,11 @@ describe("register", () => {
             .rejects.toThrow("Email already in use")
     })
 
-    it("throw 400 si le mot de passe fait moins de 8 caracteres", async () => {
+    it("throw 400 si le mot de passe fait moins de 15 caracteres", async () => {
         mockRepo.findUserByEmail.mockResolvedValue(null)
 
         await expect(authService.register("test@test.com", "short"))
-            .rejects.toThrow("Password must be at least 8 characters")
+            .rejects.toThrow("Password must be at least 15 characters")
     })
 })
 

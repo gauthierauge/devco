@@ -20,8 +20,15 @@ const createApp = () => {
     const __dirname = path.dirname(fileURLToPath(import.meta.url));
     const projectRoot = process.cwd();
 
-    app.use(express.static(path.join(projectRoot, "public"), { dotfiles: "allow" }));
-    app.use("/uploads", express.static(path.join(projectRoot, "public", "uploads")));
+    app.use(express.static(path.join(projectRoot, "public"), { dotfiles: "deny" }));
+    app.use("/uploads", express.static(path.join(projectRoot, "public", "uploads"), {
+        dotfiles: "deny",
+        setHeaders: (res) => {
+            res.setHeader("Content-Disposition", "inline");
+            res.setHeader("X-Content-Type-Options", "nosniff");
+            res.setHeader("Cache-Control", "public, max-age=86400");
+        },
+    }));
 
     app.use(sessionMiddleware);
     app.use(express.json({ limit: "10kb" }));
