@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import { listProducts, getProductById, createProduct, updateProduct, deleteProduct } from "@/services/product.service.js";
 import { HttpError } from "@/middleware/error.js";
 import type { UploadedFile } from "@/middleware/upload.js";
+import { deleteUploadedFiles } from "@/utils/file.js";
 
 const parsePrice = (value: unknown) => {
   const parsed = Number(value);
@@ -89,6 +90,11 @@ const update = async (req: Request, res: Response) => {
     price: price ?? undefined,
     images
   });
+
+  if (images) {
+    void deleteUploadedFiles(existing.images);
+  }
+
   res.json(toResponse(product));
 };
 
@@ -101,6 +107,7 @@ const remove = async (req: Request, res: Response) => {
   }
 
   await deleteProduct(id);
+  void deleteUploadedFiles(existing.images);
   res.status(204).send();
 };
 

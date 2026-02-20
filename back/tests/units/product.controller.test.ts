@@ -17,7 +17,12 @@ jest.unstable_mockModule("@/repositories/product.repository.js", () => ({
     updateProduct: jest.fn(),
     deleteProduct: jest.fn(),
 }))
+const mockedFile = {
+    deleteUploadedFiles: jest.fn<any>().mockResolvedValue(undefined),
+}
+
 jest.unstable_mockModule("@/services/product.service.js", () => mockedService)
+jest.unstable_mockModule("@/utils/file.js", () => mockedFile)
 jest.unstable_mockModule("@/config/logger.js", () => ({
     logger: { info: jest.fn(), debug: jest.fn(), warn: jest.fn(), error: jest.fn() },
 }))
@@ -131,12 +136,42 @@ describe("update", () => {
 
         await expect(update(req, res)).rejects.toThrow("Product not found")
     })
+
+    it("supprime les anciennes images si de nouvelles sont envoyées", async () => {
+        mockedService.getProductById.mockResolvedValue(fakeProduct)
+        mockedService.updateProduct.mockResolvedValue({ ...fakeProduct, images: ["/uploads/new.jpg"] })
+        const req = {
+            params: { id: "1" },
+            body: { label: "Updated" },
+            files: [{ filename: "new.jpg" }],
+        } as unknown as Request
+        const res = mockRes()
+
+        await update(req, res)
+
+        expect(mockedFile.deleteUploadedFiles).toHaveBeenCalledWith(fakeProduct.images)
+    })
+
+    it("ne supprime pas les images si aucune nouvelle image", async () => {
+        mockedService.getProductById.mockResolvedValue(fakeProduct)
+        mockedService.updateProduct.mockResolvedValue(fakeProduct)
+        const req = {
+            params: { id: "1" },
+            body: { label: "Updated" },
+            files: [],
+        } as unknown as Request
+        const res = mockRes()
+
+        await update(req, res)
+
+        expect(mockedFile.deleteUploadedFiles).not.toHaveBeenCalled()
+    })
 })
 
 describe("remove", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("retourne 204 si supprimé", async () => {
+    it("retourne 204 et supprime les images", async () => {
         mockedService.getProductById.mockResolvedValue(fakeProduct)
         mockedService.deleteProduct.mockResolvedValue(fakeProduct)
         const req = { params: { id: "1" } } as unknown as Request
@@ -146,6 +181,7 @@ describe("remove", () => {
 
         expect(res.status).toHaveBeenCalledWith(204)
         expect(res.send).toHaveBeenCalled()
+        expect(mockedFile.deleteUploadedFiles).toHaveBeenCalledWith(fakeProduct.images)
     })
 
     it("throw 404 si produit existe pas", async () => {
