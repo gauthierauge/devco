@@ -64,6 +64,12 @@ lint:
 	cd front && npm run lint
 	cd back && npm run lint
 
-test:
+test-front:
+	cd front && npm test
+
+test-back:
+	cd back && npm test
+
+test-all:
 	cd front && npm test
 	cd back && npm test
