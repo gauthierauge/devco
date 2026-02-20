@@ -34,7 +34,7 @@ const request = async <T>(url: string, options: RequestOptions = {}): Promise<T>
     method,
     body: options.body ?? null,
     headers,
-    credentials: "include",
+    credentials,
   });
 
   if (!res.ok) {
