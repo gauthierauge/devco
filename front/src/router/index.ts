@@ -1,6 +1,12 @@
 import { Home } from "../pages/Home";
 import { Product } from "../pages/Product";
 import { CspReports } from "../pages/CspReports";
+import { Login } from "../pages/Login";
+import { Register } from "../pages/Register";
+import { Dashboard } from "../pages/Dashboard";
+import { Navbar } from "../components/Navbar";
+import { Footer } from "../components/Footer";
+import { checkRouteAccess } from "./protect";
 
 type Route = {
   path: RegExp;
@@ -11,6 +17,9 @@ const routes: Route[] = [
   { path: /^\/$/, getView: () => Home() },
   { path: /^\/product\/(?<id>[^/]+)$/, getView: (params) => Product(params.id) },
   { path: /^\/csp-reports$/, getView: () => CspReports() },
+  { path: /^\/login$/, getView: () => Login() },
+  { path: /^\/register$/, getView: () => Register() },
+  { path: /^\/dashboard$/, getView: () => Dashboard() },
 ];
 
 const matchRoute = (pathname: string) => {
@@ -22,10 +31,30 @@ const matchRoute = (pathname: string) => {
 };
 
 const renderRoute = async () => {
+  const pathname = window.location.pathname;
+
+  const redirect = checkRouteAccess(pathname);
+  if (redirect) {
+    window.history.pushState({}, "", redirect);
+    renderRoute();
+    return;
+  }
+
+  const app = document.getElementById("app");
+  if (!app) return;
+
+  const navbar = Navbar();
+  app.innerHTML = `
+    ${navbar.html}
+    <main id="view" class="container"></main>
+    ${Footer()}
+  `;
+  navbar.mount();
+
   const container = document.getElementById("view");
   if (!container) return;
 
-  const match = matchRoute(window.location.pathname) ?? matchRoute("/");
+  const match = matchRoute(pathname) ?? matchRoute("/");
   if (!match) return;
 
   const view = match.route.getView(match.params);
