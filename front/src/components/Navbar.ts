@@ -21,6 +21,7 @@ const Navbar = () => {
       <div class="brand"><a href="/" data-link>Maison Déco</a></div>
       <div class="nav-links">
         <a href="/" data-link>Produits</a>
+        <a href="/stats" data-link>Statistiques</a>
         ${authLinks}
       </div>
     </nav>
