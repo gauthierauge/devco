@@ -19,4 +19,7 @@ const deleteCspReportsByIds = async (ids: number[]) =>
 const countCspReports = async () =>
     prisma.cspReport.count()
 
-export { createCspReport, getLatestCspReports, countCspReports, deleteCspReportsByIds }
+const findAllCspReports = async () =>
+    prisma.cspReport.findMany({ orderBy: { createdAt: "desc" } })
+
+export { createCspReport, getLatestCspReports, countCspReports, deleteCspReportsByIds, findAllCspReports }

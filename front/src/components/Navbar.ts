@@ -13,6 +13,7 @@ const Navbar = () => {
     : `
       <a href="/login" data-link>Connexion</a>
       <a href="/register" data-link>Inscription</a>
+      <a href="/csp-reports" data-link>CSP Reports</a>
     `;
 
   const navHtml = `
@@ -26,7 +27,6 @@ const Navbar = () => {
     </nav>
   `;
 
-  // Créer un wrapper pour gérer les événements
   const mountLogout = () => {
     const logoutBtn = document.querySelector("#logout-navbar-btn") as HTMLButtonElement | null;
     if (logoutBtn) {
