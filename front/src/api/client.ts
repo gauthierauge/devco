@@ -1,4 +1,4 @@
-import {BASE_URL} from "../constants/api.constant";
+import { BASE_URL } from "../constants/api.constant";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -9,11 +9,7 @@ type RequestOptions = {
   credentials?: RequestCredentials;
 };
 
-let csrfToken: string | null = null;
-
 const fetchCsrfToken = async (): Promise<string> => {
-  if (csrfToken) return csrfToken;
-
   const res = await fetch(`${BASE_URL}/csrf-token`, {
     credentials: "include",
   });
@@ -21,15 +17,15 @@ const fetchCsrfToken = async (): Promise<string> => {
   if (!res.ok) throw new Error("Failed to fetch CSRF token");
 
   const data = await res.json();
-  csrfToken = data.csrfToken;
-  return csrfToken!;
+  return data.csrfToken;
 };
 
 const request = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
   const method = options.method ?? "GET";
   const headers: Record<string, string> = { ...options.headers };
   const credentials = options.credentials ?? "include";
-
+  
+  // Récupérer un nouveau token CSRF pour chaque requête POST/PUT/DELETE
   if (method !== "GET" && credentials !== "omit") {
     headers["x-csrf-token"] = await fetchCsrfToken();
   }
@@ -40,10 +36,6 @@ const request = async <T>(url: string, options: RequestOptions = {}): Promise<T>
     headers,
     credentials,
   });
-
-  if (res.status === 403) {
-    csrfToken = null;
-  }
 
   if (!res.ok) {
     const text = await res.text();
