@@ -29,7 +29,7 @@ const fakeProduct = {
 describe("listProducts", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should call findManyProducts without filter by default", async () => {
+    it("appelle findManyProducts sans filtre par defaut", async () => {
         mockedRepo.findManyProducts.mockResolvedValue([])
 
         await listProducts()
@@ -37,7 +37,7 @@ describe("listProducts", () => {
         expect(mockedRepo.findManyProducts).toHaveBeenCalledWith({})
     })
 
-    it("should build OR filter for query.q", async () => {
+    it("construit un filtre OR pour query.q", async () => {
         mockedRepo.findManyProducts.mockResolvedValue([])
 
         await listProducts({ q: "test" })
@@ -50,7 +50,7 @@ describe("listProducts", () => {
         })
     })
 
-    it("should build category filter", async () => {
+    it("construit le filtre par catégorie", async () => {
         mockedRepo.findManyProducts.mockResolvedValue([])
 
         await listProducts({ category: "electronics" })
@@ -62,7 +62,7 @@ describe("listProducts", () => {
 })
 
 describe("getProductById", () => {
-    it("should delegate to findProductById", async () => {
+    it("delegue a findProductById", async () => {
         mockedRepo.findProductById.mockResolvedValue(fakeProduct)
 
         const result = await getProductById("1")
@@ -73,7 +73,7 @@ describe("getProductById", () => {
 })
 
 describe("createProduct", () => {
-    it("should delegate to createProduct repo", async () => {
+    it("delegue au repo createProduct", async () => {
         const data = { label: "New", description: "desc", category: "cat", price: 5, images: ["/img.jpg"] }
         mockedRepo.createProduct.mockResolvedValue({ ...fakeProduct, ...data })
 
@@ -85,7 +85,7 @@ describe("createProduct", () => {
 })
 
 describe("updateProduct", () => {
-    it("should delegate to updateProduct repo", async () => {
+    it("delegue au repo updateProduct", async () => {
         const data = { label: "Updated" }
         mockedRepo.updateProduct.mockResolvedValue({ ...fakeProduct, label: "Updated" })
 
@@ -97,7 +97,7 @@ describe("updateProduct", () => {
 })
 
 describe("deleteProduct", () => {
-    it("should delegate to deleteProduct repo", async () => {
+    it("delegue au repo deleteProduct", async () => {
         mockedRepo.deleteProduct.mockResolvedValue(fakeProduct)
 
         const result = await deleteProduct("1")

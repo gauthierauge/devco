@@ -38,7 +38,7 @@ beforeAll(() => {
 beforeEach(() => jest.clearAllMocks())
 
 describe("POST /api/v1/csp-report", () => {
-    it("should accept a valid CSP report with csp-report wrapper", async () => {
+    it("accepte un rapport CSP valide avec le wrapper csp-report", async () => {
         mockedRepo.createCspReport.mockResolvedValue({ id: 1, payload: {}, createdAt: new Date() })
         mockedRepo.countCspReports.mockResolvedValue(1)
 
@@ -56,7 +56,7 @@ describe("POST /api/v1/csp-report", () => {
         expect(mockedRepo.createCspReport).toHaveBeenCalled()
     })
 
-    it("should accept a valid CSP report with application/json", async () => {
+    it("accepte un rapport CSP valide avec application/json", async () => {
         mockedRepo.createCspReport.mockResolvedValue({ id: 1, payload: {}, createdAt: new Date() })
         mockedRepo.countCspReports.mockResolvedValue(1)
 
@@ -72,7 +72,7 @@ describe("POST /api/v1/csp-report", () => {
         expect(mockedRepo.createCspReport).toHaveBeenCalled()
     })
 
-    it("should return 204 but not save an invalid payload", async () => {
+    it("retourne 204 mais sauvegarde pas un payload invalide", async () => {
         const res = await request(app)
             .post("/api/v1/csp-report")
             .set("Content-Type", "application/json")
@@ -82,7 +82,7 @@ describe("POST /api/v1/csp-report", () => {
         expect(mockedRepo.createCspReport).not.toHaveBeenCalled()
     })
 
-    it("should set Report-To header on response", async () => {
+    it("met le header Report-To dans la reponse", async () => {
         mockedRepo.createCspReport.mockResolvedValue({ id: 1, payload: {}, createdAt: new Date() })
         mockedRepo.countCspReports.mockResolvedValue(1)
 
@@ -99,7 +99,7 @@ describe("POST /api/v1/csp-report", () => {
 })
 
 describe("GET /api/v1/csp-reports", () => {
-    it("should return reports as JSON", async () => {
+    it("retourne les rapports en JSON", async () => {
         mockedRepo.countCspReports.mockResolvedValue(0)
         mockedRepo.findAllCspReports.mockResolvedValue([])
 
@@ -110,8 +110,8 @@ describe("GET /api/v1/csp-reports", () => {
     })
 })
 
-describe("CSP routes - 404", () => {
-    it("should return 404 for unknown routes", async () => {
+describe("Routes CSP - 404", () => {
+    it("retourne 404 pour les routes inconnues", async () => {
         const res = await request(app).get("/api/v1/unknown-route")
 
         expect(res.status).toBe(404)

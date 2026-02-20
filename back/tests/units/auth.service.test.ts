@@ -25,7 +25,7 @@ const now = new Date()
 describe("register", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should create a user with a hashed password", async () => {
+    it("doit créer un utilisateur avec un mot de passe hashé", async () => {
         mockRepo.findUserByEmail.mockResolvedValue(null)
         mockPassword.hashPassword.mockResolvedValue("hashed123")
         mockRepo.createUser.mockResolvedValue({ id: 1, email: "test@test.com", password: "hashed123", createdAt: now, updatedAt: now })
@@ -37,14 +37,14 @@ describe("register", () => {
         expect(result).toEqual({ id: 1, email: "test@test.com" })
     })
 
-    it("should throw 400 if email is already used", async () => {
+    it("throw 400 si l'email est deja utilisé", async () => {
         mockRepo.findUserByEmail.mockResolvedValue({ id: 1, email: "taken@test.com", password: "hash", createdAt: now, updatedAt: now })
 
         await expect(authService.register("taken@test.com", "password123"))
             .rejects.toThrow("Email already in use")
     })
 
-    it("should throw 400 if password is less than 8 characters", async () => {
+    it("throw 400 si le mot de passe fait moins de 8 caracteres", async () => {
         mockRepo.findUserByEmail.mockResolvedValue(null)
 
         await expect(authService.register("test@test.com", "short"))
@@ -55,7 +55,7 @@ describe("register", () => {
 describe("login", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return the user if credentials are valid", async () => {
+    it("retourne l'utilisateur si les identifiant sont valides", async () => {
         mockRepo.findUserByEmail.mockResolvedValue({ id: 1, email: "test@test.com", password: "hashed", createdAt: now, updatedAt: now })
         mockPassword.validatePassword.mockResolvedValue(true)
 
@@ -64,14 +64,14 @@ describe("login", () => {
         expect(result).toEqual({ id: 1, email: "test@test.com" })
     })
 
-    it("should throw 401 if email does not exist", async () => {
+    it("throw 401 si l'email existe pas", async () => {
         mockRepo.findUserByEmail.mockResolvedValue(null)
 
         await expect(authService.login("unknown@test.com", "password123"))
             .rejects.toThrow("Invalid email or password")
     })
 
-    it("should throw 401 if password is incorrect", async () => {
+    it("throw 401 si le mot de passe est incorrect", async () => {
         mockRepo.findUserByEmail.mockResolvedValue({ id: 1, email: "test@test.com", password: "hashed", createdAt: now, updatedAt: now })
         mockPassword.validatePassword.mockResolvedValue(false)
 
@@ -83,7 +83,7 @@ describe("login", () => {
 describe("getCurrentUser", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return the user if found", async () => {
+    it("retourne l'utilisateur si il existe", async () => {
         mockRepo.findUserById.mockResolvedValue({ id: 1, email: "test@test.com", password: "hashed", createdAt: now, updatedAt: now })
 
         const result = await authService.getCurrentUser(1)
@@ -91,7 +91,7 @@ describe("getCurrentUser", () => {
         expect(result).toEqual({ id: 1, email: "test@test.com" })
     })
 
-    it("should throw 404 if user does not exist", async () => {
+    it("throw 404 si l'utilisateur n'existe pas", async () => {
         mockRepo.findUserById.mockResolvedValue(null)
 
         await expect(authService.getCurrentUser(999))

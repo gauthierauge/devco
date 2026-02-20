@@ -4,7 +4,7 @@ import { HttpError } from "@/middleware/error.js"
 import { authMiddleware } from "@/middleware/security/auth.js"
 
 describe("authMiddleware", () => {
-    it("should set req.userId and call next when session.userId exists", () => {
+    it("met req.userId et appelle next quand session.userId existe", () => {
         const req = { session: { userId: 42 } } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction
@@ -15,7 +15,7 @@ describe("authMiddleware", () => {
         expect(next).toHaveBeenCalled()
     })
 
-    it("should throw HttpError 401 when session has no userId", () => {
+    it("throw HttpError 401 quand la session a pas de userId", () => {
         const req = { session: {} } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction

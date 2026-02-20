@@ -1,7 +1,7 @@
 import { initializeCSRFSecret, generateCSRFToken, verifyCSRFToken } from "@/utils/csrf.js"
 
 describe("initializeCSRFSecret", () => {
-    it("should return a string", () => {
+    it("doit retourner une string", () => {
         const secret = initializeCSRFSecret()
 
         expect(typeof secret).toBe("string")
@@ -10,7 +10,7 @@ describe("initializeCSRFSecret", () => {
 })
 
 describe("generateCSRFToken", () => {
-    it("should return a token from a secret", () => {
+    it("retourne un token a partir du secret", () => {
         const secret = initializeCSRFSecret()
         const token = generateCSRFToken(secret)
 
@@ -20,14 +20,14 @@ describe("generateCSRFToken", () => {
 })
 
 describe("verifyCSRFToken", () => {
-    it("should return true for a valid token", () => {
+    it("retourne true si le token est valide", () => {
         const secret = initializeCSRFSecret()
         const token = generateCSRFToken(secret)
 
         expect(verifyCSRFToken(secret, token)).toBe(true)
     })
 
-    it("should return false for an invalid token", () => {
+    it("retourne false pour un token invalide", () => {
         const secret = initializeCSRFSecret()
 
         expect(verifyCSRFToken(secret, "invalid-token")).toBe(false)

@@ -1,7 +1,7 @@
 import { hashPassword, validatePassword } from "@/utils/password.js"
 
 describe("hashPassword", () => {
-    it("should return a bcrypt hash", async () => {
+    it("doit retourner un hash bcrypt", async () => {
         const hash = await hashPassword("mysecret123")
 
         expect(typeof hash).toBe("string")
@@ -11,14 +11,14 @@ describe("hashPassword", () => {
 })
 
 describe("validatePassword", () => {
-    it("should return true for a matching password", async () => {
+    it("retourne true pour un mot de passe correct", async () => {
         const hash = await hashPassword("correctpassword")
         const result = await validatePassword("correctpassword", hash)
 
         expect(result).toBe(true)
     })
 
-    it("should return false for a wrong password", async () => {
+    it("retourne false pour un mauvais mot de passe", async () => {
         const hash = await hashPassword("correctpassword")
         const result = await validatePassword("wrongpassword", hash)
 

@@ -22,7 +22,7 @@ const mockRes = () => {
 describe("getStats", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should call getProductStats and return the result as JSON", async () => {
+    it("doit appeler getProductStats et renvoyer le resultat en JSON", async () => {
         const stats = [{ nom: "Electronics", compte: 5 }]
         mockGetProductStats.mockResolvedValue(stats)
 

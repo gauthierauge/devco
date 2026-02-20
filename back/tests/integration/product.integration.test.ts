@@ -29,7 +29,7 @@ const { prisma } = await import("@/config/db.js");
 const app = createApp();
 const fixture = path.join(process.cwd(), "tests", "fixtures", "test.jpg");
 
-describe("Products CRUD", () => {
+describe("CRUD Produits", () => {
   beforeAll(async () => {
     await prisma.$connect();
   });
@@ -42,7 +42,7 @@ describe("Products CRUD", () => {
     await prisma.$disconnect();
   });
 
-  test("create, list, get, update, delete", async () => {
+  test("créer, lister, récuperer, modifier, supprimer", async () => {
     const createRes = await request(app)
       .post("/api/v1/products")
       .field("label", "Lampe Céramique Sable")

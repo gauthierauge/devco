@@ -16,7 +16,7 @@ const { csrfGenerateMiddleware, csrfVerifyMiddleware } = await import("@/middlew
 describe("csrfGenerateMiddleware", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should generate a secret if absent, create a token, and set res.locals", () => {
+    it("genere un secret si absent, crée un token, et met res.locals", () => {
         mockInitializeCSRFSecret.mockReturnValue("mock-secret")
         mockGenerateCSRFToken.mockReturnValue("mock-token")
 
@@ -35,7 +35,7 @@ describe("csrfGenerateMiddleware", () => {
         expect(next).toHaveBeenCalled()
     })
 
-    it("should reuse existing secret", () => {
+    it("doit réutiliser le secret existant", () => {
         mockGenerateCSRFToken.mockReturnValue("mock-token")
 
         const session: Record<string, unknown> = { csrfSecret: "existing-secret" }
@@ -54,7 +54,7 @@ describe("csrfGenerateMiddleware", () => {
 describe("csrfVerifyMiddleware", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should skip for GET requests", () => {
+    it("doit passer pour les requetes GET", () => {
         const req = { method: "GET", session: {} } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction
@@ -64,7 +64,7 @@ describe("csrfVerifyMiddleware", () => {
         expect(next).toHaveBeenCalled()
     })
 
-    it("should skip for HEAD requests", () => {
+    it("doit passer pour les requetes HEAD", () => {
         const req = { method: "HEAD", session: {} } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction
@@ -74,7 +74,7 @@ describe("csrfVerifyMiddleware", () => {
         expect(next).toHaveBeenCalled()
     })
 
-    it("should skip for OPTIONS requests", () => {
+    it("doit passer pour les requêtes OPTIONS", () => {
         const req = { method: "OPTIONS", session: {} } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction
@@ -84,7 +84,7 @@ describe("csrfVerifyMiddleware", () => {
         expect(next).toHaveBeenCalled()
     })
 
-    it("should throw 403 if no secret in session", () => {
+    it("throw 403 si pas de secret dans la session", () => {
         const req = { method: "POST", session: {}, body: { csrfToken: "tok" }, headers: {} } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction
@@ -92,7 +92,7 @@ describe("csrfVerifyMiddleware", () => {
         expect(() => csrfVerifyMiddleware(req, res, next)).toThrow("CSRF secret not found in session")
     })
 
-    it("should throw 403 if no token provided", () => {
+    it("throw 403 si aucun token fourni", () => {
         const req = { method: "POST", session: { csrfSecret: "sec" }, body: {}, headers: {} } as unknown as Request
         const res = {} as Response
         const next = jest.fn() as NextFunction
@@ -100,7 +100,7 @@ describe("csrfVerifyMiddleware", () => {
         expect(() => csrfVerifyMiddleware(req, res, next)).toThrow("CSRF token not provided")
     })
 
-    it("should throw 403 if token is invalid", () => {
+    it("throw 403 si le token est invalide", () => {
         mockVerifyCSRFToken.mockReturnValue(false)
         const req = { method: "POST", session: { csrfSecret: "sec" }, body: { csrfToken: "bad" }, headers: {} } as unknown as Request
         const res = {} as Response
@@ -109,7 +109,7 @@ describe("csrfVerifyMiddleware", () => {
         expect(() => csrfVerifyMiddleware(req, res, next)).toThrow("Invalid CSRF token")
     })
 
-    it("should call next if token is valid", () => {
+    it("appelle next si le token est valide", () => {
         mockVerifyCSRFToken.mockReturnValue(true)
         const req = { method: "POST", session: { csrfSecret: "sec" }, body: { csrfToken: "valid" }, headers: {} } as unknown as Request
         const res = {} as Response
