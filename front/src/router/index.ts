@@ -1,5 +1,6 @@
 import { Home } from "../pages/Home";
 import { Product } from "../pages/Product";
+import { Stats } from "../pages/Stats";
 
 type Route = {
   path: RegExp;
@@ -9,6 +10,7 @@ type Route = {
 const routes: Route[] = [
   { path: /^\/$/, getView: () => Home() },
   { path: /^\/product\/(?<id>[^/]+)$/, getView: (params) => Product(params.id) },
+  { path: /^\/stats$/, getView: () => Stats() },
 ];
 
 const matchRoute = (pathname: string) => {
