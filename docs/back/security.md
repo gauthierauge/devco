@@ -22,7 +22,7 @@ La securite du backend repose sur plusieurs couches complementaires :
 defaultSrc        : 'self'
 scriptSrc         : 'unsafe-inline', 'nonce-<dynamique>'
 styleSrc          : 'self'
-imgSrc            : 'self', data:, blob:
+imgSrc            : 'self', data:, blob:, BACKEND_URL
 connectSrc        : 'self', BACKEND_URL
 fontSrc           : 'self'
 objectSrc         : 'none'
@@ -30,7 +30,7 @@ frameAncestors    : 'none'
 baseUri           : 'self'
 formAction        : 'self'
 requireTrustedTypesFor : 'script'
-reportUri         : /api/csp-report
+reportUri         : /api/v1/csp-report
 reportTo          : csp-endpoint
 ```
 
