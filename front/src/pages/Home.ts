@@ -3,6 +3,7 @@ import { SearchBar } from "../components/SearchBar";
 import { ProductCard } from "../components/ProductCard";
 import { toProductCardView } from "../mappers/productPresenter";
 import { filterProducts, toView } from "../services/productService";
+import { authService } from "../services/authService";
 
 type HomeState = {
   products: Awaited<ReturnType<typeof listProducts>>;
@@ -22,6 +23,10 @@ const setState = (state: HomeState, patch: Partial<HomeState>): HomeState => ({
 });
 
 const renderForm = (state: HomeState) => {
+  if (!authService.isLoggedIn()) {
+    return "";
+  }
+
   const editingProduct = state.products.find((product) => product.id === state.editingId);
   const label = editingProduct?.label ?? "";
   const description = editingProduct?.description ?? "";
@@ -64,7 +69,11 @@ const renderForm = (state: HomeState) => {
 
 const renderList = (state: HomeState) => {
   const filtered = filterProducts(state.products, state.query).map(toView);
-  const cards = filtered.map(toProductCardView).map(ProductCard).join("");
+  const canManage = authService.isLoggedIn();
+  const cards = filtered
+    .map(toProductCardView)
+    .map((product) => ProductCard({ ...product, canManage }))
+    .join("");
   return `
       <section class="panel">
         <div class="panel-header">
@@ -76,18 +85,31 @@ const renderList = (state: HomeState) => {
     `;
 };
 
-const renderHome = (state: HomeState) => `
+const renderHome = (state: HomeState) => {
+  const canManage = authService.isLoggedIn();
+  const content = canManage
+    ? `
+      <div class="grid">
+        ${renderForm(state)}
+        ${renderList(state)}
+      </div>
+    `
+    : `
+      <div class="grid-center">
+        ${renderList(state)}
+      </div>
+    `;
+
+  return `
   <div class="page">
     <header class="page-header">
       <h1>Collection Décoration</h1>
       <p>Gérez vos pièces artisanales et objets déco.</p>
     </header>
-    <div class="grid">
-      ${renderForm(state)}
-      ${renderList(state)}
-    </div>
+    ${content}
   </div>
 `;
+};
 
 const Home = () => {
   let state = initialState;
@@ -112,7 +134,11 @@ const Home = () => {
       const grid = document.getElementById("product-grid");
       if (!grid) return;
       const filtered = filterProducts(state.products, state.query).map(toView);
-      const cards = filtered.map(toProductCardView).map(ProductCard).join("");
+      const canManage = authService.isLoggedIn();
+      const cards = filtered
+        .map(toProductCardView)
+        .map((product) => ProductCard({ ...product, canManage }))
+        .join("");
       grid.innerHTML = cards || "<p>Aucun produit.</p>";
     });
 
@@ -167,12 +193,14 @@ const Home = () => {
         if (!id) return;
 
         if (action === "delete") {
+          if (!authService.isLoggedIn()) return;
           await deleteProduct(id);
           await load();
           return;
         }
 
         if (action === "edit") {
+          if (!authService.isLoggedIn()) return;
           state = setState(state, { editingId: id });
           repaint();
         }
