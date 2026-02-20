@@ -33,14 +33,14 @@ const mockRes = () => {
 describe("registerHandler", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should throw 400 if email or password is missing", async () => {
+    it("throw 400 si email ou password manquant", async () => {
         const req = { body: { email: "" } } as Request
         const res = mockRes()
 
         await expect(registerHandler(req, res)).rejects.toThrow("Email and password are required")
     })
 
-    it("should call authService.register, set session.userId, and return 201", async () => {
+    it("appelle authService.register, set session.userId, et retourne 201", async () => {
         const session: Record<string, unknown> = {}
         const req = { body: { email: "test@test.com", password: "password123" }, session } as unknown as Request
         const res = mockRes()
@@ -59,14 +59,14 @@ describe("registerHandler", () => {
 describe("loginHandler", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should throw 400 if email or password is missing", async () => {
+    it("throw 400 si email ou password manquant", async () => {
         const req = { body: { password: "pass" } } as Request
         const res = mockRes()
 
         await expect(loginHandler(req, res)).rejects.toThrow("Email and password are required")
     })
 
-    it("should call authService.login, set session.userId, and return 200", async () => {
+    it("appelle authService.login, met session.userId, et retourne 200", async () => {
         const session: Record<string, unknown> = {}
         const req = { body: { email: "test@test.com", password: "password123" }, session } as unknown as Request
         const res = mockRes()
@@ -85,7 +85,7 @@ describe("loginHandler", () => {
 describe("logoutHandler", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should destroy the session and return 200", async () => {
+    it("detruit la session et retourne 200", async () => {
         const destroyFn = jest.fn<any>((cb: (err?: Error) => void) => cb())
         const req = { session: { destroy: destroyFn } } as unknown as Request
         const res = mockRes()
@@ -101,14 +101,14 @@ describe("logoutHandler", () => {
 describe("getCurrentUserHandler", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should throw 401 if no userId", async () => {
+    it("throw 401 si pas de userId", async () => {
         const req = { userId: undefined } as unknown as Request
         const res = mockRes()
 
         await expect(getCurrentUserHandler(req, res)).rejects.toThrow("Unauthorized")
     })
 
-    it("should return the user with status 200", async () => {
+    it("retourne le user avec status 200", async () => {
         const req = { userId: 1 } as unknown as Request
         const res = mockRes()
 

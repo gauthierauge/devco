@@ -15,7 +15,7 @@ const { getProductStats } = await import("@/services/stats.service.js")
 describe("getProductStats", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should call prisma.product.groupBy and transform the result", async () => {
+    it("appelle prisma.product.groupBy et transforme le resultat", async () => {
         mockGroupBy.mockResolvedValue([
             { category: "Electronics", _count: { _all: 5 } },
             { category: "Books", _count: { _all: 3 } },
@@ -33,7 +33,7 @@ describe("getProductStats", () => {
         ])
     })
 
-    it("should return empty array when no products", async () => {
+    it("retourne un tableau vide quand il y a pas de produits", async () => {
         mockGroupBy.mockResolvedValue([])
 
         const result = await getProductStats()

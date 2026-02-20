@@ -33,7 +33,7 @@ const mockRes = () => {
 describe("receiveCspReport", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return 204 when report is saved", async () => {
+    it("retourne 204 quand le rapport est sauvegardé", async () => {
         const req = { body: { "csp-report": { "document-uri": "https://example.com", "violated-directive": "script-src" } } } as Request
         const res = mockRes()
 
@@ -45,7 +45,7 @@ describe("receiveCspReport", () => {
         expect(res.status).toHaveBeenCalledWith(204)
     })
 
-    it("should return 204 when report is invalid (ignored)", async () => {
+    it("retourne 204 quand le rapport est invalide (on ignore)", async () => {
         const req = { body: { invalid: true } } as Request
         const res = mockRes()
 
@@ -56,7 +56,7 @@ describe("receiveCspReport", () => {
         expect(res.status).toHaveBeenCalledWith(204)
     })
 
-    it("should use body directly when no csp-report wrapper", async () => {
+    it("utilise le body directement quand y a pas de wrapper csp-report", async () => {
         const payload = { "document-uri": "https://example.com", "violated-directive": "script-src" }
         const req = { body: payload } as Request
         const res = mockRes()
@@ -72,7 +72,7 @@ describe("receiveCspReport", () => {
 describe("listCspReports", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return reports as JSON", async () => {
+    it("retourne les rapports en JSON", async () => {
         const req = {} as Request
         const res = mockRes()
 

@@ -28,7 +28,7 @@ describe("requestLogger", () => {
         return { req, res, next, listeners }
     }
 
-    it("should call next() immediately", () => {
+    it("doit appeler next() tout de suite", () => {
         const { req, res, next } = createReqRes(200)
 
         requestLogger(req, res, next)
@@ -36,7 +36,7 @@ describe("requestLogger", () => {
         expect(next).toHaveBeenCalled()
     })
 
-    it("should log info for 2xx status codes on finish", () => {
+    it("log info pour les codes 2xx quand la requete se termine", () => {
         const { req, res, next, listeners } = createReqRes(200)
 
         requestLogger(req, res, next)
@@ -45,7 +45,7 @@ describe("requestLogger", () => {
         expect(mockLogger.info).toHaveBeenCalled()
     })
 
-    it("should log warn for 4xx status codes on finish", () => {
+    it("log warn pour les codes 4xx quand la requête se termine", () => {
         const { req, res, next, listeners } = createReqRes(404)
 
         requestLogger(req, res, next)
@@ -54,7 +54,7 @@ describe("requestLogger", () => {
         expect(mockLogger.warn).toHaveBeenCalled()
     })
 
-    it("should log error for 5xx status codes on finish", () => {
+    it("log error pour les codes 5xx", () => {
         const { req, res, next, listeners } = createReqRes(500)
 
         requestLogger(req, res, next)

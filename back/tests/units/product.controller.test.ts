@@ -43,7 +43,7 @@ const fakeProduct = {
 describe("list", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return products in JSON with price as Number", async () => {
+    it("retourne les produits en JSON avec le prix en Number", async () => {
         mockedService.listProducts.mockResolvedValue([fakeProduct])
         const req = { query: {} } as unknown as Request
         const res = mockRes()
@@ -57,7 +57,7 @@ describe("list", () => {
 describe("getById", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return 404 if product not found", async () => {
+    it("retourne 404 si le produit est pas trouvé", async () => {
         mockedService.getProductById.mockResolvedValue(null)
         const req = { params: { id: "999" } } as unknown as Request
         const res = mockRes()
@@ -68,7 +68,7 @@ describe("getById", () => {
         expect(res.json).toHaveBeenCalledWith({ message: "Product not found" })
     })
 
-    it("should return the product if found", async () => {
+    it("retourne le produit si trouvé", async () => {
         mockedService.getProductById.mockResolvedValue(fakeProduct)
         const req = { params: { id: "1" } } as unknown as Request
         const res = mockRes()
@@ -82,7 +82,7 @@ describe("getById", () => {
 describe("create", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return 400 if required fields are missing", async () => {
+    it("retourne 400 si les champs obligatoire sont manquants", async () => {
         const req = { body: { label: "Only label" }, files: [] } as unknown as Request
         const res = mockRes()
 
@@ -92,7 +92,7 @@ describe("create", () => {
         expect(res.json).toHaveBeenCalledWith({ message: "Missing required fields" })
     })
 
-    it("should create the product with status 201", async () => {
+    it("crée le produit avec status 201", async () => {
         mockedService.createProduct.mockResolvedValue(fakeProduct)
         const req = {
             body: { label: "Laptop", description: "A laptop", category: "Electronics", price: "999.99" },
@@ -110,7 +110,7 @@ describe("create", () => {
 describe("update", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return 400 if price is invalid", async () => {
+    it("retourne 400 si le prix est pas valide", async () => {
         const req = { params: { id: "1" }, body: { price: "not-a-number" }, files: [] } as unknown as Request
         const res = mockRes()
 
@@ -120,7 +120,7 @@ describe("update", () => {
         expect(res.json).toHaveBeenCalledWith({ message: "Invalid price" })
     })
 
-    it("should return 404 if product does not exist", async () => {
+    it("retourne 404 si le produit existe pas", async () => {
         mockedService.updateProduct.mockRejectedValue(new Error("Not found"))
         const req = { params: { id: "999" }, body: { label: "Updated" } } as unknown as Request
         const res = mockRes()
@@ -135,7 +135,7 @@ describe("update", () => {
 describe("remove", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return 204 if deleted", async () => {
+    it("retourne 204 si supprimé", async () => {
         mockedService.deleteProduct.mockResolvedValue(fakeProduct)
         const req = { params: { id: "1" } } as unknown as Request
         const res = mockRes()
@@ -146,7 +146,7 @@ describe("remove", () => {
         expect(res.send).toHaveBeenCalled()
     })
 
-    it("should return 404 if product does not exist", async () => {
+    it("retourne 404 si produit existe pas", async () => {
         mockedService.deleteProduct.mockRejectedValue(new Error("Not found"))
         const req = { params: { id: "999" } } as unknown as Request
         const res = mockRes()

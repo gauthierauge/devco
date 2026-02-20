@@ -22,7 +22,7 @@ const mockRes = () => {
 }
 
 describe("HttpError", () => {
-    it("should create an error with statusCode and message", () => {
+    it("crée une erreur avec statusCode et message", () => {
         const err = new HttpError(404, "Not found")
 
         expect(err).toBeInstanceOf(Error)
@@ -32,7 +32,7 @@ describe("HttpError", () => {
 })
 
 describe("asyncHandler", () => {
-    it("should catch async errors and pass them to next", async () => {
+    it("catch les erreurs async et les passe a next", async () => {
         const error = new Error("async failure")
         const fn = async () => { throw error }
         const next = jest.fn() as NextFunction
@@ -45,7 +45,7 @@ describe("asyncHandler", () => {
         expect(next).toHaveBeenCalledWith(error)
     })
 
-    it("should not call next when no error", async () => {
+    it("n'appelle pas next quand il y a pas d'erreur", async () => {
         const fn = async (_req: Request, _res: Response, _next: NextFunction) => {}
         const next = jest.fn() as NextFunction
         const req = {} as Request
@@ -59,7 +59,7 @@ describe("asyncHandler", () => {
 })
 
 describe("notFoundHandler", () => {
-    it("should call next with an HttpError 404", () => {
+    it("appelle next avec une HttpError 404", () => {
         const req = {} as Request
         const res = mockRes()
         const next = jest.fn() as NextFunction
@@ -76,7 +76,7 @@ describe("notFoundHandler", () => {
 describe("errorHandler", () => {
     beforeEach(() => jest.clearAllMocks())
 
-    it("should return the statusCode from HttpError", () => {
+    it("retourne le statusCode depuis HttpError", () => {
         const err = new HttpError(422, "Validation failed")
         const req = {} as Request
         const res = mockRes()
@@ -88,7 +88,7 @@ describe("errorHandler", () => {
         expect(res.json).toHaveBeenCalledWith({ error: "Validation failed" })
     })
 
-    it("should return 500 for a standard Error", () => {
+    it("retourne 500 pour une Error standard", () => {
         const err = new Error("Something broke")
         const req = {} as Request
         const res = mockRes()
@@ -100,7 +100,7 @@ describe("errorHandler", () => {
         expect(res.json).toHaveBeenCalledWith({ error: "Something broke" })
     })
 
-    it("should log error for 500+ status codes", () => {
+    it("log error pour les codes 500+", () => {
         const err = new HttpError(500, "Server error")
         const req = {} as Request
         const res = mockRes()
@@ -111,7 +111,7 @@ describe("errorHandler", () => {
         expect(mockLogger.error).toHaveBeenCalled()
     })
 
-    it("should log warn for 4xx status codes", () => {
+    it("log warn pour les codes 4xx", () => {
         const err = new HttpError(400, "Bad request")
         const req = {} as Request
         const res = mockRes()
