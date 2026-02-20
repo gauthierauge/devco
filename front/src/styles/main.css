@@ -41,6 +41,14 @@ body {
   @apply grid gap-8 lg:grid-cols-[320px_1fr];
 }
 
+.grid-center {
+  @apply flex justify-center;
+}
+
+.grid-center .panel {
+  @apply w-full max-w-4xl;
+}
+
 .panel {
   @apply bg-white rounded-2xl p-6 shadow-sm;
 }
