@@ -23,9 +23,9 @@ const fetchCsrfToken = async (): Promise<string> => {
 const request = async <T>(url: string, options: RequestOptions = {}): Promise<T> => {
   const method = options.method ?? "GET";
   const headers: Record<string, string> = { ...options.headers };
+
   const credentials = options.credentials ?? "include";
-  
-  // Récupérer un nouveau token CSRF pour chaque requête POST/PUT/DELETE
+
   if (method !== "GET" && credentials !== "omit") {
     headers["x-csrf-token"] = await fetchCsrfToken();
   }
@@ -34,7 +34,7 @@ const request = async <T>(url: string, options: RequestOptions = {}): Promise<T>
     method,
     body: options.body ?? null,
     headers,
-    credentials,
+    credentials: "include",
   });
 
   if (!res.ok) {

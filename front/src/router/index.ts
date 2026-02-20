@@ -1,5 +1,6 @@
 import { Home } from "../pages/Home";
 import { Product } from "../pages/Product";
+import { CspReports } from "../pages/CspReports";
 import { Stats } from "../pages/Stats";
 import { Login } from "../pages/Login";
 import { Register } from "../pages/Register";
@@ -16,6 +17,7 @@ type Route = {
 const routes: Route[] = [
   { path: /^\/$/, getView: () => Home() },
   { path: /^\/product\/(?<id>[^/]+)$/, getView: (params) => Product(params.id) },
+  { path: /^\/csp-reports$/, getView: () => CspReports() },
   { path: /^\/stats$/, getView: () => Stats() },
   { path: /^\/login$/, getView: () => Login() },
   { path: /^\/register$/, getView: () => Register() },

@@ -7,6 +7,6 @@ const cspReportRouter = Router()
 
 cspReportRouter.post("/csp-report", asyncHandler(receiveCspReport))
 
-cspReportRouter.get("/csp-reports",  authMiddleware, asyncHandler(listCspReports))
+cspReportRouter.get("/csp-reports", asyncHandler(listCspReports))
 
 export { cspReportRouter }
