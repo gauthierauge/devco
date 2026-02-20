@@ -63,7 +63,7 @@ const Dashboard = () => {
                 return;
             }
         } catch (error) {
-            console.error("Error validating session:", error);
+
         }
 
         const renderedUser = authService.getCurrentUser();
@@ -80,7 +80,7 @@ const Dashboard = () => {
                 window.history.pushState({}, "", "/login");
                 window.dispatchEvent(new PopStateEvent("popstate"));
             } catch (error) {
-                console.error("Logout error:", error);
+
             }
         });
 

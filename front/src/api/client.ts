@@ -38,8 +38,14 @@ const request = async <T>(url: string, options: RequestOptions = {}): Promise<T>
   });
 
   if (!res.ok) {
-    const text = await res.text();
-    throw new Error(text || `HTTP ${res.status}`);
+    const status = res.status;
+    let message = `Erreur ${status}`;
+    try {
+      const body = await res.json();
+      if (body?.error) message = body.error;
+    } catch {
+    }
+    throw new Error(message);
   }
 
   if (res.status === 204) return undefined as T;

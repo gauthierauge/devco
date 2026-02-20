@@ -70,7 +70,7 @@ const Register = () => {
                 window.history.pushState({}, "", "/dashboard");
                 window.dispatchEvent(new PopStateEvent("popstate"));
             } catch (error) {
-                const message = error instanceof Error ? error.message : "Erreur d'inscription";
+                const message = error instanceof Error ? error.message : "Une erreur est survenue lors de l'inscription";
                 if (errorDiv) {
                     errorDiv.textContent = message;
                     errorDiv.style.display = "block";
