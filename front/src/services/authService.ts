@@ -4,8 +4,8 @@ import {
     logout as logoutApi,
     getCurrentUser as getCurrentUserApi,
     type AuthResponse,
-} from "../api/authApi";
-import { AUTH_STORAGE_KEY } from "../constants/auth.constant";
+} from "@/api/authApi";
+import { AUTH_STORAGE_KEY } from "@/constants/auth.constant";
 
 interface User extends AuthResponse { }
 

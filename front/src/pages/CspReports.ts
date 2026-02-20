@@ -1,6 +1,6 @@
-import { listCspReports } from "../api/cspReportApi";
-import { toView, type CspReportView } from "../services/cspReportService";
-import { presentCspReportTable } from "../mappers/cspReportPresenter";
+import { listCspReports } from "@/api/cspReportApi";
+import { toView, type CspReportView } from "@/services/cspReportService";
+import { presentCspReportTable } from "@/mappers/cspReportPresenter";
 
 type CspReportsState = {
   reports: CspReportView[];

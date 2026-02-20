@@ -1,4 +1,4 @@
-import { initRouter } from "./router";
+import { initRouter } from "@/router";
 
 const startApp = () => {
   const app = document.getElementById("app");

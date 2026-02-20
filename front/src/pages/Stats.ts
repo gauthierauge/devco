@@ -1,7 +1,7 @@
-import { listStats } from "../api/statsApi";
-import { StatList } from "../components/StatList";
-import { toStatListView } from "../mappers/statsPresenter";
-import { totalCount, toView } from "../services/statsService";
+import { listStats } from "@/api/statsApi";
+import { StatList } from "@/components/StatList";
+import { toStatListView } from "@/mappers/statsPresenter";
+import { totalCount, toView } from "@/services/statsService";
 
 type StatsState = {
   stats: Awaited<ReturnType<typeof listStats>>;

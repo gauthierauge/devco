@@ -1,4 +1,4 @@
-import { BASE_URL } from "../constants/api.constant";
+import { BASE_URL } from "@/constants/api.constant";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 

@@ -148,7 +148,7 @@ const Cart = () => {
         const container = document.getElementById("view");
         if (!container) return;
 
-        const { authService } = await import("../services/authService");
+        const { authService } = await import("@/services/authService");
         const isLoggedIn = authService.isLoggedIn();
 
         // Afficher le panier

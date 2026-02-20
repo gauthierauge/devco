@@ -1,5 +1,5 @@
-import type { ProductDto } from "../api/productApi";
-import { request } from "../api/client";
+import type { ProductDto } from "@/api/productApi";
+import { request } from "@/api/client";
 
 export interface CartItem {
     productId: string;

@@ -1,4 +1,4 @@
-import type { CspReportDto } from "../api/cspReportApi";
+import type { CspReportDto } from "@/api/cspReportApi";
 
 type CspReportView = {
   id: number;

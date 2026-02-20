@@ -1,8 +1,8 @@
 jest.mock("@/config/env", () => ({ API_URL: "http://test:5000" }));
-jest.mock("../src/api/client", () => ({ request: jest.fn() }));
+jest.mock("@/api/client", () => ({ request: jest.fn() }));
 
-import { register, login, logout, getCurrentUser } from "../src/api/authApi";
-import { request } from "../src/api/client";
+import { register, login, logout, getCurrentUser } from "@/api/authApi";
+import { request } from "@/api/client";
 
 const BASE_URL = "http://test:5000/api/v1";
 const mockRequest = jest.mocked(request);

@@ -1,5 +1,5 @@
-import { request } from "./client";
-import { BASE_URL } from "../constants/api.constant";
+import { request } from "@/api/client";
+import { BASE_URL } from "@/constants/api.constant";
 
 interface AuthResponse {
     id: string;

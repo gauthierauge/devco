@@ -1,14 +1,14 @@
-import { Home } from "../pages/Home";
-import { Product } from "../pages/Product";
-import { CspReports } from "../pages/CspReports";
-import { Stats } from "../pages/Stats";
-import { Login } from "../pages/Login";
-import { Register } from "../pages/Register";
-import { Dashboard } from "../pages/Dashboard";
-import { Cart } from "../pages/Cart";
-import { Navbar } from "../components/Navbar";
-import { Footer } from "../components/Footer";
-import { checkRouteAccess } from "./protect";
+import { Home } from "@/pages/Home";
+import { Product } from "@/pages/Product";
+import { CspReports } from "@/pages/CspReports";
+import { Stats } from "@/pages/Stats";
+import { Login } from "@/pages/Login";
+import { Register } from "@/pages/Register";
+import { Dashboard } from "@/pages/Dashboard";
+import { Cart } from "@/pages/Cart";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
+import { checkRouteAccess } from "@/router/protect";
 
 type Route = {
   path: RegExp;

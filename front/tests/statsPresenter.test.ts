@@ -1,5 +1,5 @@
-import { toStatListView } from "../src/mappers/statsPresenter";
-import type { StatView } from "../src/services/statsService";
+import { toStatListView } from "@/mappers/statsPresenter";
+import type { StatView } from "@/services/statsService";
 
 describe("toStatListView", () => {
     it("ajoute displayName = nom de la catégorie", () => {

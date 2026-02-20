@@ -1,4 +1,4 @@
-import type { StatDto } from "../api/statsApi";
+import type { StatDto } from "@/api/statsApi";
 
 type StatView = StatDto & {
   percent: number;

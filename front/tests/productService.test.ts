@@ -1,5 +1,5 @@
-import { formatPrice, toView, filterProducts } from "../src/services/productService";
-import type { ProductDto } from "../src/api/productApi";
+import { formatPrice, toView, filterProducts } from "@/services/productService";
+import type { ProductDto } from "@/api/productApi";
 
 const makeProduct = (overrides: Partial<ProductDto> = {}): ProductDto => ({
     id: "1",

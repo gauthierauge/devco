@@ -1,4 +1,4 @@
-import { authService } from "../services/authService";
+import { authService } from "@/services/authService";
 
 const renderDashboard = (user: { id: string; email: string }) => `
     <div class="page">

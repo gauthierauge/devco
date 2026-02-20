@@ -1,5 +1,5 @@
-import { toView } from "../src/services/cspReportService";
-import type { CspReportDto } from "../src/api/cspReportApi";
+import { toView } from "@/services/cspReportService";
+import type { CspReportDto } from "@/api/cspReportApi";
 
 describe("cspReportService toView", () => {
     it("mappe les champs violated-directive, document-uri, blocked-uri", () => {

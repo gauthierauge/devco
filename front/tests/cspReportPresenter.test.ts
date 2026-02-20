@@ -1,5 +1,5 @@
-import { presentCspReportRow, presentCspReportTable } from "../src/mappers/cspReportPresenter";
-import type { CspReportView } from "../src/services/cspReportService";
+import { presentCspReportRow, presentCspReportTable } from "@/mappers/cspReportPresenter";
+import type { CspReportView } from "@/services/cspReportService";
 
 const makeReport = (overrides: Partial<CspReportView> = {}): CspReportView => ({
     id: 1,

@@ -1,4 +1,4 @@
-import type { StatListView } from "../mappers/statsPresenter";
+import type { StatListView } from "@/mappers/statsPresenter";
 
 const StatList = (stats: StatListView[]) => `
   <ul class="stat-list">

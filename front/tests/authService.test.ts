@@ -1,14 +1,14 @@
 jest.mock("@/config/env", () => ({ API_URL: "http://test:5000" }));
-jest.mock("../src/api/authApi", () => ({
+jest.mock("@/api/authApi", () => ({
     register: jest.fn(),
     login: jest.fn(),
     logout: jest.fn(),
     getCurrentUser: jest.fn(),
 }));
 
-import { authService } from "../src/services/authService";
-import { register as registerApi, login as loginApi, logout as logoutApi, getCurrentUser as getCurrentUserApi } from "../src/api/authApi";
-import { AUTH_STORAGE_KEY } from "../src/constants/auth.constant";
+import { authService } from "@/services/authService";
+import { register as registerApi, login as loginApi, logout as logoutApi, getCurrentUser as getCurrentUserApi } from "@/api/authApi";
+import { AUTH_STORAGE_KEY } from "@/constants/auth.constant";
 
 const mockRegister = jest.mocked(registerApi);
 const mockLogin = jest.mocked(loginApi);

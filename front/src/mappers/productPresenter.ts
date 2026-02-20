@@ -1,5 +1,5 @@
-import { API_URL } from "../config/env";
-import type { ProductView } from "../services/productService";
+import { API_URL } from "@/config/env";
+import type { ProductView } from "@/services/productService";
 
 type ProductCardView = ProductView & {
   imageUrl: string;

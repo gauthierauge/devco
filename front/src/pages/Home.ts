@@ -1,10 +1,10 @@
-﻿import { listProducts, createProduct, updateProduct, deleteProduct } from "../api/productApi";
-import { SearchBar } from "../components/SearchBar";
-import { ProductCard } from "../components/ProductCard";
-import { toProductCardView } from "../mappers/productPresenter";
-import { filterProducts, toView } from "../services/productService";
-import { authService } from "../services/authService";
-import { cartService } from "../services/cartService";
+﻿import { listProducts, createProduct, updateProduct, deleteProduct } from "@/api/productApi";
+import { SearchBar } from "@/components/SearchBar";
+import { ProductCard } from "@/components/ProductCard";
+import { toProductCardView } from "@/mappers/productPresenter";
+import { filterProducts, toView } from "@/services/productService";
+import { authService } from "@/services/authService";
+import { cartService } from "@/services/cartService";
 
 type HomeState = {
   products: Awaited<ReturnType<typeof listProducts>>;

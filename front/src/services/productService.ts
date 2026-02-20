@@ -1,4 +1,4 @@
-import type { ProductDto } from "../api/productApi";
+import type { ProductDto } from "@/api/productApi";
 
 type ProductView = ProductDto & { formattedPrice: string };
 
