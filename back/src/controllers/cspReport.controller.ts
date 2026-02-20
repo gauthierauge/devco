@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import {logger} from "@/config/logger.js";
-import {cleanupOldReports, saveCspReport} from "@/services/cspReport.service.js";
+import {listCspReports as listCspReportsService, saveCspReport} from "@/services/cspReport.service.js";
 
 // POST /api/csp-report
 const receiveCspReport = async (req: Request, res: Response) => {
@@ -19,7 +19,7 @@ const receiveCspReport = async (req: Request, res: Response) => {
 
 // GET /api/csp-reports
 const listCspReports = async (_req: Request, res: Response) => {
-    const reports = await cleanupOldReports();
+    const reports = await listCspReportsService();
 
     res.json(reports);
 }
