@@ -4,7 +4,8 @@ import {
     countCspReports,
     deleteCspReportsByIds,
     createCspReport,
-    getLatestCspReports
+    getLatestCspReports,
+    findAllCspReports
 } from "@/repositories/cspReport.repository.js";
 import {logger} from "@/config/logger.js";
 
@@ -46,4 +47,9 @@ const isValidCspPayload = (payload: unknown): payload is Record<string, unknown>
 
     return hasRequiredFields && hasOnlyValidFields
 }
-export {cleanupOldReports, saveCspReport}
+const listCspReports = async () => {
+    await cleanupOldReports()
+    return findAllCspReports()
+}
+
+export {cleanupOldReports, saveCspReport, listCspReports}
