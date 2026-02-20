@@ -73,7 +73,7 @@ const Stats = () => {
     } catch (error) {
       state = setState(state, {
         loading: false,
-        error: error instanceof Error ? error.message : "Erreur lors du chargement",
+        error: "Erreur lors du chargement des statistiques.",
       });
     }
     repaint();

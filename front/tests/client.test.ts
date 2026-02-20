@@ -66,10 +66,20 @@ describe("request", () => {
         fetchMock.mockResolvedValueOnce({
             ok: false,
             status: 400,
-            text: async () => "Bad Request",
+            json: async () => ({ error: "Bad Request" }),
         });
 
         await expect(request(`${BASE_URL}/test`)).rejects.toThrow("Bad Request");
+    });
+
+    it("throw avec message generique si pas de JSON dans la reponse erreur", async () => {
+        fetchMock.mockResolvedValueOnce({
+            ok: false,
+            status: 500,
+            json: async () => { throw new Error("no json") },
+        });
+
+        await expect(request(`${BASE_URL}/test`)).rejects.toThrow("Erreur 500");
     });
 
     it("retourne undefined pour status 204", async () => {
