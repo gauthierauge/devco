@@ -1,15 +1,33 @@
+import { jest } from "@jest/globals"
 import request from "supertest"
-import { createApp } from "@/app.js"
-import * as repository from "@/repositories/cspReport.repository.js"
 import type { Express } from "express"
+import type { Request, Response, NextFunction } from "express"
 
-jest.mock("@/config/db.js", () => ({ prisma: {} }))
-jest.mock("@/repositories/cspReport.repository.js")
-jest.mock("@/config/logger.js", () => ({
+const mockedRepo = {
+    createCspReport: jest.fn<any>(),
+    countCspReports: jest.fn<any>(),
+    getLatestCspReports: jest.fn<any>(),
+    deleteCspReportsByIds: jest.fn<any>(),
+    findAllCspReports: jest.fn<any>(),
+}
+
+jest.unstable_mockModule("@/config/db.js", () => ({ prisma: {} }))
+jest.unstable_mockModule("@/repositories/cspReport.repository.js", () => mockedRepo)
+jest.unstable_mockModule("@/config/logger.js", () => ({
     logger: { info: jest.fn(), debug: jest.fn(), warn: jest.fn(), error: jest.fn() },
 }))
+jest.unstable_mockModule("@/middleware/session.js", () => ({
+    sessionMiddleware: (req: Request, _res: Response, next: NextFunction) => {
+        (req as any).session = {};
+        next()
+    },
+}))
+jest.unstable_mockModule("@/middleware/security/csrf.js", () => ({
+    csrfGenerateMiddleware: (_req: Request, _res: Response, next: NextFunction) => next(),
+    csrfVerifyMiddleware: (_req: Request, _res: Response, next: NextFunction) => next(),
+}))
 
-const mockedRepo = repository as jest.Mocked<typeof repository>
+const { createApp } = await import("@/app.js")
 
 let app: Express
 
@@ -19,13 +37,13 @@ beforeAll(() => {
 
 beforeEach(() => jest.clearAllMocks())
 
-describe("POST /api/csp-report", () => {
+describe("POST /api/v1/csp-report", () => {
     it("should accept a valid CSP report with csp-report wrapper", async () => {
         mockedRepo.createCspReport.mockResolvedValue({ id: 1, payload: {}, createdAt: new Date() })
         mockedRepo.countCspReports.mockResolvedValue(1)
 
         const res = await request(app)
-            .post("/api/csp-report")
+            .post("/api/v1/csp-report")
             .set("Content-Type", "application/csp-report")
             .send(JSON.stringify({
                 "csp-report": {
@@ -43,7 +61,7 @@ describe("POST /api/csp-report", () => {
         mockedRepo.countCspReports.mockResolvedValue(1)
 
         const res = await request(app)
-            .post("/api/csp-report")
+            .post("/api/v1/csp-report")
             .set("Content-Type", "application/json")
             .send({
                 "document-uri": "https://example.com",
@@ -56,7 +74,7 @@ describe("POST /api/csp-report", () => {
 
     it("should return 204 but not save an invalid payload", async () => {
         const res = await request(app)
-            .post("/api/csp-report")
+            .post("/api/v1/csp-report")
             .set("Content-Type", "application/json")
             .send({ invalid: true })
 
@@ -69,7 +87,7 @@ describe("POST /api/csp-report", () => {
         mockedRepo.countCspReports.mockResolvedValue(1)
 
         const res = await request(app)
-            .post("/api/csp-report")
+            .post("/api/v1/csp-report")
             .set("Content-Type", "application/json")
             .send({
                 "document-uri": "https://example.com",
@@ -80,11 +98,12 @@ describe("POST /api/csp-report", () => {
     })
 })
 
-describe("GET /api/csp-reports", () => {
+describe("GET /api/v1/csp-reports", () => {
     it("should return reports as JSON", async () => {
         mockedRepo.countCspReports.mockResolvedValue(0)
+        mockedRepo.findAllCspReports.mockResolvedValue([])
 
-        const res = await request(app).get("/api/csp-reports")
+        const res = await request(app).get("/api/v1/csp-reports")
 
         expect(res.status).toBe(200)
         expect(res.headers["content-type"]).toMatch(/json/)
@@ -93,7 +112,7 @@ describe("GET /api/csp-reports", () => {
 
 describe("CSP routes - 404", () => {
     it("should return 404 for unknown routes", async () => {
-        const res = await request(app).get("/api/unknown-route")
+        const res = await request(app).get("/api/v1/unknown-route")
 
         expect(res.status).toBe(404)
     })

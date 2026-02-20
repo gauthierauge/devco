@@ -1,13 +1,20 @@
-import { saveCspReport, cleanupOldReports } from "@/services/cspReport.service.js"
-import * as repository from "@/repositories/cspReport.repository.js"
+import { jest } from "@jest/globals"
 
-jest.mock("@/config/db.js", () => ({ prisma: {} }))
-jest.mock("@/repositories/cspReport.repository.js")
-jest.mock("@/config/logger.js", () => ({
+const mockedRepo = {
+    createCspReport: jest.fn<any>(),
+    countCspReports: jest.fn<any>(),
+    getLatestCspReports: jest.fn<any>(),
+    deleteCspReportsByIds: jest.fn<any>(),
+    findAllCspReports: jest.fn<any>(),
+}
+
+jest.unstable_mockModule("@/config/db.js", () => ({ prisma: {} }))
+jest.unstable_mockModule("@/repositories/cspReport.repository.js", () => mockedRepo)
+jest.unstable_mockModule("@/config/logger.js", () => ({
     logger: { info: jest.fn(), debug: jest.fn(), warn: jest.fn(), error: jest.fn() },
 }))
 
-const mockedRepo = repository as jest.Mocked<typeof repository>
+const { saveCspReport, cleanupOldReports } = await import("@/services/cspReport.service.js")
 
 const validPayload = {
     "document-uri": "https://example.com",
