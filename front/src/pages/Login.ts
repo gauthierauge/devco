@@ -55,12 +55,12 @@ const Login = () => {
                 window.history.pushState({}, "", "/dashboard");
                 window.dispatchEvent(new PopStateEvent("popstate"));
             } catch (error) {
-                const message = error instanceof Error ? error.message : "Erreur de connexion";
+                const message = error instanceof Error ? error.message : "Une erreur est survenue lors de la connexion";
                 if (errorDiv) {
                     errorDiv.textContent = message;
                     errorDiv.style.display = "block";
                 }
-                console.error("Login error:", error);
+
             }
         });
     };
