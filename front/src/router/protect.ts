@@ -20,7 +20,7 @@ export const checkRouteAccess = (pathname: string): string | null => {
     }
 
     if (level === "auth-only" && isLogged) {
-        return "/dashboard";
+        return "/";
     }
 
     return null;

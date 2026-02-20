@@ -3,6 +3,7 @@ import { SearchBar } from "../components/SearchBar";
 import { ProductCard } from "../components/ProductCard";
 import { toProductCardView } from "../mappers/productPresenter";
 import { filterProducts, toView } from "../services/productService";
+import { cartService } from "../services/cartService";
 
 type HomeState = {
   products: Awaited<ReturnType<typeof listProducts>>;
@@ -165,6 +166,20 @@ const Home = () => {
         const action = (el as HTMLElement).dataset.action;
         const id = (el as HTMLElement).dataset.id;
         if (!id) return;
+
+        if (action === "add-to-cart") {
+          cartService.addItem(id, 1);
+          const btn = el as HTMLButtonElement;
+          const originalText = btn.textContent;
+          btn.textContent = "✓ Ajouté";
+          btn.disabled = true;
+
+          setTimeout(() => {
+            btn.textContent = originalText;
+            btn.disabled = false;
+          }, 1500);
+          return;
+        }
 
         if (action === "delete") {
           await deleteProduct(id);
