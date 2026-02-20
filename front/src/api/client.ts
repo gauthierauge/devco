@@ -1,4 +1,4 @@
-import {BASE_URL} from "../constants/api.constant";
+import { BASE_URL } from "../constants/api.constant";
 
 type HttpMethod = "GET" | "POST" | "PUT" | "DELETE";
 
@@ -6,6 +6,7 @@ type RequestOptions = {
   method?: HttpMethod;
   body?: BodyInit | null;
   headers?: Record<string, string>;
+  credentials?: RequestCredentials;
 };
 
 const fetchCsrfToken = async (): Promise<string> => {
@@ -23,8 +24,9 @@ const request = async <T>(url: string, options: RequestOptions = {}): Promise<T>
   const method = options.method ?? "GET";
   const headers: Record<string, string> = { ...options.headers };
 
-  // Récupérer un nouveau token CSRF pour chaque requête POST/PUT/DELETE
-  if (method !== "GET") {
+  const credentials = options.credentials ?? "include";
+
+  if (method !== "GET" && credentials !== "omit") {
     headers["x-csrf-token"] = await fetchCsrfToken();
   }
 

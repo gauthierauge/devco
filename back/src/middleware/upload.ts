@@ -5,6 +5,7 @@ import { Request, Response, NextFunction } from "express";
 
 const uploadsDir = path.join(process.cwd(), "public", "uploads");
 const MAX_FILE_SIZE = 2 * 1024 * 1024;
+const MAX_BODY_SIZE = 10 * 1024 * 1024;
 const MAX_FILES = 5;
 const ALLOWED_MIME = ["image/jpeg", "image/png", "image/webp", "image/gif"];
 
@@ -18,6 +19,47 @@ type UploadedFile = {
   filename: string;
   mimetype: string;
   size: number;
+};
+
+const detectMime = (buffer: Buffer): string | null => {
+  if (buffer.length < 12) return null;
+
+  if (buffer[0] === 0xff && buffer[1] === 0xd8 && buffer[2] === 0xff) {
+    return "image/jpeg";
+  }
+
+  const pngSig = [0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a];
+  if (pngSig.every((byte, idx) => buffer[idx] === byte)) {
+    return "image/png";
+  }
+
+  const gifSig = buffer.subarray(0, 6).toString("ascii");
+  if (gifSig === "GIF87a" || gifSig === "GIF89a") {
+    return "image/gif";
+  }
+
+  const riff = buffer.subarray(0, 4).toString("ascii");
+  const webp = buffer.subarray(8, 12).toString("ascii");
+  if (riff === "RIFF" && webp === "WEBP") {
+    return "image/webp";
+  }
+
+  return null;
+};
+
+const extensionFromMime = (mimetype: string) => {
+  switch (mimetype) {
+    case "image/jpeg":
+      return ".jpg";
+    case "image/png":
+      return ".png";
+    case "image/webp":
+      return ".webp";
+    case "image/gif":
+      return ".gif";
+    default:
+      return ".bin";
+  }
 };
 
 const parseMultipart = (req: Request) => {
@@ -35,7 +77,16 @@ const parseMultipart = (req: Request) => {
   const chunks: Buffer[] = [];
 
   return new Promise<{ fields: Record<string, string>; files: UploadedFile[] }>((resolve, reject) => {
-    req.on("data", (chunk) => chunks.push(chunk));
+    let totalSize = 0;
+    req.on("data", (chunk) => {
+      totalSize += chunk.length;
+      if (totalSize > MAX_BODY_SIZE) {
+        reject(new Error("Payload too large"));
+        req.destroy();
+        return;
+      }
+      chunks.push(chunk);
+    });
     req.on("error", reject);
     req.on("end", () => {
       const buffer = Buffer.concat(chunks);
@@ -75,15 +126,24 @@ const parseMultipart = (req: Request) => {
             throw new Error("File too large");
           }
 
+          const detectedMime = detectMime(fileBuffer);
+          if (!detectedMime || !ALLOWED_MIME.includes(detectedMime)) {
+            throw new Error("Invalid image content");
+          }
+
+          if (detectedMime !== mimetype) {
+            throw new Error("Mimetype mismatch");
+          }
+
           if (files.length >= MAX_FILES) {
             throw new Error("Too many files");
           }
 
           ensureUploadsDir();
-          const ext = path.extname(filenameMatch[1]).toLowerCase() || ".bin";
+          const ext = extensionFromMime(detectedMime);
           const filename = `${randomUUID()}${ext}`;
           fs.writeFileSync(path.join(uploadsDir, filename), fileBuffer);
-          files.push({ filename, mimetype, size: fileBuffer.length });
+          files.push({ filename, mimetype: detectedMime, size: fileBuffer.length });
         } else {
           fields[fieldName] = Buffer.from(body, "latin1").toString("utf8");
         }
