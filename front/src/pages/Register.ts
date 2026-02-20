@@ -14,14 +14,14 @@ const renderRegister = () => `
             </label>
             <label>
                 Mot de passe
-                <input name="password" type="password" placeholder="••••••••" minlength="8" required />
+                <input name="password" type="password" placeholder="••••••••" minlength="15" required />
             </label>
             <label>
                 Confirmer le mot de passe
-                <input name="confirm-password" type="password" placeholder="••••••••" minlength="8" required />
+                <input name="confirm-password" type="password" placeholder="••••••••" minlength="15" required />
             </label>
             
-            <small>Le mot de passe doit contenir au minimum 8 caractères.</small>
+            <small>Le mot de passe doit contenir au minimum 15 caractères.</small>
             
             <button class="btn" type="submit">S'inscrire</button>
             </form>
@@ -57,8 +57,8 @@ const Register = () => {
                     throw new Error("Tous les champs sont obligatoires");
                 }
 
-                if (password.length < 8) {
-                    throw new Error("Le mot de passe doit contenir au minimum 8 caractères");
+                if (password.length < 15) {
+                    throw new Error("Le mot de passe doit contenir au minimum 15 caractères");
                 }
 
                 if (password !== confirmPassword) {

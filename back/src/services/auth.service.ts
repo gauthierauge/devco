@@ -4,6 +4,35 @@ import type { UserResponse } from "@/types/auth.js"
 import { hashPassword, validatePassword } from "@/utils/password.js"
 import { createUser, findUserByEmail, findUserById } from "@/repositories/user.repository.js"
 
+const MIN_PASSWORD_LENGTH = 15
+const MAX_PASSWORD_LENGTH = 128
+const BLOCKED_PASSWORDS = new Set([
+    "password",
+    "password1",
+    "123456",
+    "123456789",
+    "qwerty",
+    "azerty",
+    "admin",
+    "letmein",
+    "welcome",
+    "iloveyou",
+    "devco",
+    "maisondeco",
+    "maison déco",
+])
+
+const isBlockedPassword = (email: string, password: string) => {
+    const normalized = password.trim().toLowerCase()
+    if (BLOCKED_PASSWORDS.has(normalized)) return true
+
+    const [localPart, domain] = email.toLowerCase().split("@")
+    if (localPart && normalized.includes(localPart)) return true
+    if (domain && normalized.includes(domain)) return true
+
+    return false
+}
+
 const register = async (
     email: string,
     password: string
@@ -14,9 +43,19 @@ const register = async (
         throw new HttpError(400, "Email already in use")
     }
 
-    if (password.length < 8) {
+    if (password.length < MIN_PASSWORD_LENGTH) {
         logger.warn({ email }, "Registration attempt with weak password")
-        throw new HttpError(400, "Password must be at least 8 characters")
+        throw new HttpError(400, `Password must be at least ${MIN_PASSWORD_LENGTH} characters`)
+    }
+
+    if (password.length > MAX_PASSWORD_LENGTH) {
+        logger.warn({ email }, "Registration attempt with overly long password")
+        throw new HttpError(400, `Password must be at most ${MAX_PASSWORD_LENGTH} characters`)
+    }
+
+    if (isBlockedPassword(email, password)) {
+        logger.warn({ email }, "Registration attempt with blocked password")
+        throw new HttpError(400, "Password is too common or contains user information")
     }
 
     const hashedPassword = await hashPassword(password)
