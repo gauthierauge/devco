@@ -1,5 +1,6 @@
 import { listStats } from "../api/statsApi";
-import { presentStatList } from "../mappers/statsPresenter";
+import { StatList } from "../components/StatList";
+import { toStatListView } from "../mappers/statsPresenter";
 import { totalCount, toView } from "../services/statsService";
 
 type StatsState = {
@@ -40,7 +41,7 @@ const renderStats = (state: StatsState) => {
       </div>
       <div class="stat-badge">${state.stats.length} catégorie(s)</div>
     </div>
-    ${presentStatList(view)}
+    ${StatList(view.map(toStatListView))}
   `;
 };
 
