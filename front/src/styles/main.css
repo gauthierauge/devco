@@ -21,8 +21,28 @@ body {
   @apply text-xl font-semibold tracking-tight;
 }
 
+.nav-links {
+  @apply flex items-center gap-5;
+}
+
 .nav-links a {
-  @apply text-sm font-medium text-neutral-700 hover:text-neutral-900;
+  @apply text-sm font-medium text-neutral-700 hover:text-neutral-900 transition-colors;
+}
+
+.nav-separator {
+  @apply w-px h-4 bg-neutral-200;
+}
+
+.nav-cart {
+  @apply relative;
+}
+
+.nav-cart-badge {
+  @apply absolute -top-2 -right-3 bg-red-500 text-white text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center;
+}
+
+.nav-logout {
+  @apply text-sm font-medium text-neutral-500 border border-neutral-200 rounded-lg px-3 py-1.5 hover:bg-neutral-100 hover:text-neutral-900 transition-colors;
 }
 
 .footer {

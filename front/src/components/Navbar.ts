@@ -5,28 +5,28 @@ const Navbar = () => {
   const user = authService.getCurrentUser();
   const cartCount = cartService.getCount();
 
-  const authLinks = user
-    ? `
-      <a href="/dashboard" data-link>Dashboard</a>
-      <button id="logout-navbar-btn" class="btn btn-outline" style="padding: 0.4em 0.8em; font-size: 0.875em;">
-        Déconnexion
-      </button>
-    `
-    : `
-      <a href="/login" data-link>Connexion</a>
-      <a href="/register" data-link>Inscription</a>
-      <a href="/csp-reports" data-link>CSP Reports</a>
-    `;
-
   const cartLink = `
-    <a href="/cart" data-link class="cart-link" style="position: relative;">
+    <a href="/cart" data-link class="nav-cart">
       Panier
-      ${cartCount > 0
-      ? `<span class="cart-badge" style="position: absolute; top: -8px; right: -8px; background: #ff4444; color: white; border-radius: 50%; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; font-size: 0.75em; font-weight: bold;">${cartCount}</span>`
-      : ""
-    }
+      ${cartCount > 0 ? `<span class="nav-cart-badge">${cartCount}</span>` : ""}
     </a>
   `;
+
+  const userLinks = user
+    ? `
+      <span class="nav-separator"></span>
+      <a href="/csp-reports" data-link>CSP Reports</a>
+      <a href="/dashboard" data-link>Dashboard</a>
+      ${cartLink}
+      <span class="nav-separator"></span>
+      <a href="#" id="logout-navbar-btn" class="nav-logout">Déconnexion</a>
+    `
+    : `
+      <span class="nav-separator"></span>
+      ${cartLink}
+      <a href="/login" data-link>Connexion</a>
+      <a href="/register" data-link>Inscription</a>
+    `;
 
   const navHtml = `
     <nav class="navbar">
@@ -34,29 +34,26 @@ const Navbar = () => {
       <div class="nav-links">
         <a href="/" data-link>Produits</a>
         <a href="/stats" data-link>Statistiques</a>
-        ${authLinks}
-        ${cartLink}
+        ${userLinks}
       </div>
     </nav>
   `;
 
-  const mountLogout = () => {
-    const logoutBtn = document.querySelector("#logout-navbar-btn") as HTMLButtonElement | null;
-    if (logoutBtn) {
-      logoutBtn.addEventListener("click", async (e) => {
-        e.preventDefault();
-        try {
-          await authService.logout();
-          window.history.pushState({}, "", "/login");
-          window.dispatchEvent(new PopStateEvent("popstate"));
-        } catch (error) {
-          console.error("Logout error:", error);
-        }
-      });
-    }
+  const mount = () => {
+    const logoutBtn = document.querySelector("#logout-navbar-btn") as HTMLAnchorElement | null;
+    logoutBtn?.addEventListener("click", async (e) => {
+      e.preventDefault();
+      try {
+        await authService.logout();
+        window.history.pushState({}, "", "/login");
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      } catch (error) {
+        console.error("Logout error:", error);
+      }
+    });
   };
 
-  return { html: navHtml, mount: mountLogout };
+  return { html: navHtml, mount };
 };
 
 export { Navbar };
