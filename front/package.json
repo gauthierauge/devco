@@ -33,6 +33,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^0.574.0",
     "radix-ui": "^1.4.3",
-    "tailwind-merge": "^3.4.1"
+    "tailwind-merge": "^3.4.1",
+    "zod": "^4.3.6"
   }
 }

@@ -1,4 +1,6 @@
 import { authService } from "@/services/authService";
+import { loginSchema, type LoginFormData } from "@/utils/passwordValidator";
+import { z } from "zod";
 
 const renderLogin = () => `
     <div class="page">
@@ -10,11 +12,11 @@ const renderLogin = () => `
             <form id="login-form" class="form">
             <label>
                 Email
-                <input name="email" type="email" placeholder="vous@exemple.com" required />
+                <input name="email" type="email" placeholder="vous@exemple.com" autocomplete="email" required />
             </label>
             <label>
                 Mot de passe
-                <input name="password" type="password" placeholder="••••••••" required />
+                <input name="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
             </label>
             
             <button class="btn" type="submit">Se connecter</button>
@@ -46,21 +48,28 @@ const Login = () => {
                 const email = String(data.get("email") || "");
                 const password = String(data.get("password") || "");
 
-                if (!email || !password) {
-                    throw new Error("Email et mot de passe obligatoires");
-                }
+                const validatedData: LoginFormData = loginSchema.parse({ email, password });
 
-                await authService.login(email, password);
+                await authService.login(validatedData.email, validatedData.password);
+
+                form.reset();
 
                 window.history.pushState({}, "", "/dashboard");
                 window.dispatchEvent(new PopStateEvent("popstate"));
             } catch (error) {
-                const message = error instanceof Error ? error.message : "Une erreur est survenue lors de la connexion";
+
+                let message = "Une erreur est survenue lors de la connexion";
+
+                if (error instanceof z.ZodError) {
+                    message = error.issues[0]?.message || message;
+                } else if (error instanceof Error) {
+                    message = error.message;
+                }
+
                 if (errorDiv) {
                     errorDiv.textContent = message;
                     errorDiv.style.display = "block";
                 }
-
             }
         });
     };

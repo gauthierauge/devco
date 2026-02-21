@@ -1,4 +1,6 @@
 import { authService } from "@/services/authService";
+import { registerSchema, type RegisterFormData } from "@/utils/passwordValidator";
+import { z } from "zod";
 
 const renderRegister = () => `
     <div class="page">
@@ -10,18 +12,18 @@ const renderRegister = () => `
             <form id="register-form" class="form">
             <label>
                 Email
-                <input name="email" type="email" placeholder="vous@exemple.com" required />
+                <input name="email" type="email" placeholder="vous@exemple.com" autocomplete="email" required />
             </label>
             <label>
                 Mot de passe
-                <input name="password" type="password" placeholder="••••••••" minlength="15" required />
+                <input name="password" type="password" placeholder="••••••••" autocomplete="new-password" minlength="15" required />
             </label>
             <label>
                 Confirmer le mot de passe
-                <input name="confirm-password" type="password" placeholder="••••••••" minlength="15" required />
+                <input name="confirm-password" type="password" placeholder="••••••••" autocomplete="new-password" minlength="15" required />
             </label>
             
-            <small>Le mot de passe doit contenir au minimum 15 caractères.</small>
+            <small>Le mot de passe doit contenir au minimum 15 caractères (majuscule, minuscule, chiffre et caractère spécial).</small>
             
             <button class="btn" type="submit">S'inscrire</button>
             </form>
@@ -53,24 +55,28 @@ const Register = () => {
                 const password = String(data.get("password") || "");
                 const confirmPassword = String(data.get("confirm-password") || "");
 
-                if (!email || !password || !confirmPassword) {
-                    throw new Error("Tous les champs sont obligatoires");
-                }
+                const validatedData: RegisterFormData = registerSchema.parse({
+                    email,
+                    password,
+                    confirmPassword,
+                });
 
-                if (password.length < 15) {
-                    throw new Error("Le mot de passe doit contenir au minimum 15 caractères");
-                }
+                await authService.register(validatedData.email, validatedData.password);
 
-                if (password !== confirmPassword) {
-                    throw new Error("Les mots de passe ne correspondent pas");
-                }
-
-                await authService.register(email, password);
+                form.reset();
 
                 window.history.pushState({}, "", "/dashboard");
                 window.dispatchEvent(new PopStateEvent("popstate"));
             } catch (error) {
-                const message = error instanceof Error ? error.message : "Une erreur est survenue lors de l'inscription";
+
+                let message = "Une erreur est survenue lors de l'inscription";
+
+                if (error instanceof z.ZodError) {
+                    message = error.issues[0]?.message || message;
+                } else if (error instanceof Error) {
+                    message = error.message;
+                }
+
                 if (errorDiv) {
                     errorDiv.textContent = message;
                     errorDiv.style.display = "block";
