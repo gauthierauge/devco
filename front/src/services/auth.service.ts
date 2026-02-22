@@ -29,39 +29,16 @@ const clearStoredUser = (): void => {
 const register = async (email: string, password: string): Promise<User> => {
     const user = await registerApi(email, password);
     storeUser(user);
-
-    try {
-        const { cartService } = await import("./cart.service");
-        await cartService.syncCart();
-    } catch (error) {
-        console.error("Erreur lors de la synchronisation du panier :", error);
-    }
-
     return user;
 };
 
 const login = async (email: string, password: string): Promise<User> => {
     const user = await loginApi(email, password);
     storeUser(user);
-
-    try {
-        const { cartService } = await import("./cart.service");
-        await cartService.syncCart();
-    } catch (error) {
-        console.error("Erreur lors de la synchronisation du panier :", error);
-    }
-
     return user;
 };
 
 const logout = async (): Promise<void> => {
-    try {
-        const { cartService } = await import("./cart.service");
-        await cartService.syncCart([]);
-    } catch (error) {
-        console.error("Erreur lors du nettoyage du panier :", error);
-    }
-
     await logoutApi();
     clearStoredUser();
 };

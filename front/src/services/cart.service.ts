@@ -1,5 +1,6 @@
 import type { ProductDto } from "@/api/product.api";
 import { request } from "@/api/client";
+import { BASE_URL } from "@/constants/api.constant";
 
 export interface CartItem {
     productId: string;
@@ -11,7 +12,7 @@ export interface CartItemWithProduct extends CartItem {
 }
 
 const STORAGE_KEY = "devco_cart";
-const API_BASE = "/cart";
+const API_BASE = `${BASE_URL}/cart`;
 
 export const cartService = {
 

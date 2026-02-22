@@ -32,6 +32,10 @@ const renderCart = async (isLoggedIn: boolean = false) => {
     );
 
     const validItems = itemsWithProducts.filter((item) => item !== null);
+    const invalidIds = items
+        .filter((_, i) => itemsWithProducts[i] === null)
+        .map((item) => item.productId);
+    invalidIds.forEach((id) => cartService.removeItem(id));
 
     if (validItems.length === 0) {
         return renderEmptyCart();
