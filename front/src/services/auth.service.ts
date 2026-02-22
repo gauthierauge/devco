@@ -7,7 +7,7 @@ import {
 } from "@/api/auth.api";
 import { AUTH_STORAGE_KEY } from "@/constants/auth.constant";
 
-interface User extends AuthResponse { }
+type User = AuthResponse;
 
 const getStoredUser = (): User | null => {
     try {

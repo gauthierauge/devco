@@ -12,8 +12,8 @@ const registerHandler = async (req: Request, res: Response) => {
         throw new HttpError(400, "Email and password are required")
     }
 
-    const user = await authService.register(email, password);
-    (req.session as any).userId = user.id
+    const user = await authService.register(email, password)
+    req.session.userId = user.id
 
     logger.info({ userId: user.id }, "User registration successful")
     res.status(201).json(user)
@@ -28,8 +28,8 @@ const loginHandler = async (req: Request, res: Response) => {
         throw new HttpError(400, "Email and password are required")
     }
 
-    const user = await authService.login(email, password);
-    (req.session as any).userId = user.id
+    const user = await authService.login(email, password)
+    req.session.userId = user.id
 
     logger.info({ userId: user.id }, "User login successful")
     res.status(200).json(user)

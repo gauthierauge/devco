@@ -4,7 +4,7 @@ import { generateCSRFToken, verifyCSRFToken, initializeCSRFSecret } from "@/util
 import {CSRF_SECRET_KEY, CSRF_TOKEN_KEY} from "@/constants/csrf.constant.js";
 
 const csrfGenerateMiddleware = (req: Request, res: Response, next: NextFunction) => {
-    const session = req.session as any
+    const session = req.session
 
     if (!session[CSRF_SECRET_KEY]) {
         session[CSRF_SECRET_KEY] = initializeCSRFSecret()
@@ -22,7 +22,7 @@ const csrfVerifyMiddleware = (req: Request, res: Response, next: NextFunction) =
         return next()
     }
 
-    const session = req.session as any
+    const session = req.session
     const secret = session[CSRF_SECRET_KEY]
     const token = req.body?.csrfToken || req.headers["x-csrf-token"]
 

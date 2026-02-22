@@ -62,7 +62,7 @@ const Dashboard = () => {
                 window.dispatchEvent(new PopStateEvent("popstate"));
                 return;
             }
-        } catch (error) {
+        } catch {
 
         }
 
@@ -79,7 +79,7 @@ const Dashboard = () => {
                 await authService.logout();
                 window.history.pushState({}, "", "/login");
                 window.dispatchEvent(new PopStateEvent("popstate"));
-            } catch (error) {
+            } catch {
 
             }
         });

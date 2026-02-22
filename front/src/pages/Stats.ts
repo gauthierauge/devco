@@ -70,7 +70,7 @@ const Stats = () => {
     try {
       const stats = await listStats();
       state = setState(state, { stats, loading: false });
-    } catch (error) {
+    } catch {
       state = setState(state, {
         loading: false,
         error: "Erreur lors du chargement des statistiques.",

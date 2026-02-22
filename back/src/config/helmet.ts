@@ -1,12 +1,13 @@
 import { HelmetOptions } from "helmet"
 import { IncomingMessage, ServerResponse } from "http"
+import { Response } from "express"
 import { BACKEND_URL } from "@/config/env.js"
 
 const helmetOptions: HelmetOptions = {
     contentSecurityPolicy: {
         directives: {
             defaultSrc: ["'self'"],
-            scriptSrc: ["'unsafe-inline'", (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as any).locals.cspNonce}'`],
+            scriptSrc: ["'unsafe-inline'", (_req: IncomingMessage, res: ServerResponse) => `'nonce-${(res as unknown as Response).locals.cspNonce}'`],
             styleSrc: ["'self'"],
             imgSrc: ["'self'", "data:", "blob:", BACKEND_URL],
             connectSrc: ["'self'", BACKEND_URL],

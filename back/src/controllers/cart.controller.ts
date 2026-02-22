@@ -6,13 +6,12 @@ export interface CartItem {
 }
 
 const getSessionCart = (req: Request): CartItem[] => {
-    const session = req.session as any
-    return session.cart || []
+    return req.session.cart || []
 }
 
 const setSessionCart = (req: Request, cart: CartItem[]) => {
     if (req.session) {
-        (req.session as any).cart = cart
+        req.session.cart = cart
     }
 }
 

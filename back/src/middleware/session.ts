@@ -1,9 +1,10 @@
-import session, { Store } from "express-session"
+import session, { SessionData, Store } from "express-session"
+import { Prisma } from "@/generated/prisma/client.js"
 import { prisma } from "@/config/db.js"
 import { logger } from "@/config/logger.js"
 
 class PrismaStore extends Store {
-    async get(sid: string, callback: (err?: any, session?: any) => void) {
+    async get(sid: string, callback: (err: unknown, session?: SessionData | null) => void) {
         try {
             const record = await prisma.session.findUnique({ where: { id: sid } })
             if (!record) return callback(null, null)
@@ -11,20 +12,20 @@ class PrismaStore extends Store {
                 await prisma.session.delete({ where: { id: sid } })
                 return callback(null, null)
             }
-            callback(null, record.data)
+            callback(null, record.data as unknown as SessionData)
         } catch (error) {
             logger.error({ error, sid }, "Error getting session")
             callback(error)
         }
     }
 
-    async set(sid: string, data: any, callback?: (err?: any) => void) {
+    async set(sid: string, data: SessionData, callback?: (err?: unknown) => void) {
         try {
             const expiresAt = new Date(data.cookie.expires || Date.now() + 24 * 60 * 60 * 1000)
             await prisma.session.upsert({
                 where: { id: sid },
-                update: { data, expiresAt },
-                create: { id: sid, data, expiresAt },
+                update: { data: data as unknown as Prisma.JsonObject, expiresAt },
+                create: { id: sid, data: data as unknown as Prisma.JsonObject, expiresAt },
             })
             callback?.()
         } catch (error) {
@@ -33,18 +34,18 @@ class PrismaStore extends Store {
         }
     }
 
-    async destroy(sid: string, callback?: (err?: any) => void) {
+    async destroy(sid: string, callback?: (err?: unknown) => void) {
         try {
             await prisma.session.delete({ where: { id: sid } })
             callback?.()
         } catch (error) {
-            if ((error as any).code === "P2025") return callback?.()
+            if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === "P2025") return callback?.()
             logger.error({ error, sid }, "Error destroying session")
             callback?.(error)
         }
     }
 
-    async clear(callback?: (err?: any) => void) {
+    async clear(callback?: (err?: unknown) => void) {
         try {
             await prisma.session.deleteMany({})
             callback?.()
@@ -54,7 +55,7 @@ class PrismaStore extends Store {
         }
     }
 
-    async touch(sid: string, data: any, callback?: (err?: any) => void) {
+    async touch(sid: string, data: SessionData, callback?: (err?: unknown) => void) {
         try {
             const expiresAt = new Date(data.cookie.expires || Date.now() + 24 * 60 * 60 * 1000)
             await prisma.session.update({ where: { id: sid }, data: { expiresAt } })

@@ -1,14 +1,15 @@
 # Devco
 
-Projet full-stack avec un frontend React et un backend Express.
+Projet full-stack avec un frontend et un backend Express.
 
 ## Structure du projet
 
 ```
 devco/
-├── front/          # Application React (Vite + TypeScript)
+├── front/          # Application (Vite + TypeScript)
 ├── back/           # API Express (TypeScript + Prisma)
 ├── docs/           # Documentation detaillée du projet
+├── docker/           # Docker init
 └── README.md
 ```
 
@@ -42,7 +43,7 @@ devco/
 
 - **Node.js** >= 18
 - **npm**
-- **PostgreSQL** en cours d'execution
+- **PostgreSQL** 
 
 ## Installation
 
@@ -64,16 +65,6 @@ npm install
 ```bash
 cd back
 npm install
-cp .env.example .env
-```
-
-Editer `back/.env` avec vos identifiants :
-
-```env
-BACKEND_URL="http://localhost:5000"
-FRONTEND_URL="http://localhost:3000"
-DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
-LOG_LEVEL="debug"
 ```
 
 Puis initialiser la base de donnees :
@@ -82,18 +73,17 @@ Puis initialiser la base de donnees :
 npm run db:migrate
 ```
 
+> **Note :**
+> Nous avons laissez le .env dans l'app pour que ce soit plus simple pour l'installation du projet
+
 ## Lancer le projet
 
-Ouvrir deux terminaux :
+Dans le terminal :
 
 ```bash
-# Terminal 1 — Backend (port 5000)
-cd back
-npm run dev
-
-# Terminal 2 — Frontend (port 3000)
-cd front
-npm run dev
+#lance la bdd + démarre backend et frontend
+#il faut rester sur /devco
+make dev
 ```
 
 | Service | URL |
@@ -101,30 +91,55 @@ npm run dev
 | Frontend | http://localhost:3000 |
 | Backend | http://localhost:5000 |
 
-## Scripts disponibles
+## Commandes Make
 
-### Frontend (`front/`)
+Toutes les commandes se lancent depuis la racine du projet (`/devco`).
 
-| Commande | Description |
-|----------|-------------|
-| `npm run dev` | Serveur dev Vite |
-| `npm run build` | Build de production (tsc + vite build) |
-| `npm run preview` | Preview du build de production |
-| `npm run lint` | ESLint sur `src/` |
-
-### Backend (`back/`)
+### Dev
 
 | Commande | Description |
 |----------|-------------|
-| `npm run dev` | Serveur dev avec rechargement auto |
-| `npm run build` | Compilation TypeScript |
-| `npm test` | Lancer les tests (Jest) |
-| `npm run lint` | ESLint sur `src/` |
-| `npm run db:migrate` | Appliquer les migrations Prisma |
-| `npm run db:generate` | Regenerer les types Prisma |
-| `npm run db:studio` | Ouvrir Prisma Studio |
+| `make install` | Installe les dependances front et back |
+| `make dev` | Lance la BDD + backend + frontend |
+| `make dev-front` | Lance le frontend seul (Vite) |
+| `make dev-back` | Lance le backend seul |
+| `make clean` | Supprime `node_modules` et `dist` |
+
+### Base de donnees / Docker
+
+| Commande | Description |
+|----------|-------------|
+| `make db` | Demarre le conteneur PostgreSQL |
+| `make db-stop` | Arrete le conteneur |
+| `make db-reset` | Supprime les volumes, redemarre et migre |
+| `make db-logs` | Affiche les logs du conteneur |
+
+### Prisma
+
+| Commande | Description |
+|----------|-------------|
+| `make prisma-generate` | Regenere les types Prisma |
+| `make prisma-migrate` | Applique les migrations |
+| `make prisma-migrate-create name=xxx` | Cree une nouvelle migration |
+| `make prisma-studio` | Ouvre Prisma Studio |
+| `make prisma-seed` | Execute le seed |
+
+### Qualite
+
+| Commande | Description |
+|----------|-------------|
+| `make lint` | ESLint sur front et back |
+| `make test-front` | Tests Jest frontend (12 suites) |
+| `make test-back` | Tests Jest backend (20 suites) |
+| `make test-all` | Lance tous les tests |
 
 ## Documentation
 
-- [Architecture du backend](back/docs/architecture.md)
-- [Securite du backend](back/docs/security.md)
+- [Architecture du backend](docs/back/architecture.md)
+- [Securite du backend](docs/back/security.md)
+- [Architecture du frontend](docs/front/architecture.md)
+- [Client API frontend](docs/front/api-client.md)
+- [API (routes et endpoints)](docs/api.md)
+- [Base de donnees](docs/database.md)
+- [Docker](docs/docker.md)
+- [Tests](docs/tests.md)

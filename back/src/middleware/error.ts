@@ -21,12 +21,14 @@ const notFoundHandler = (_req: Request, _res: Response, next: NextFunction) => {
     next(new HttpError(404, "Route non trouvée"))
 }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 const errorHandler = (
     err: Error | HttpError,
     _req: Request,
     res: Response,
     _next: NextFunction,
 ) => {
+/* eslint-enable @typescript-eslint/no-unused-vars */
     const statusCode = err instanceof HttpError ? err.statusCode : 500
 
     if (statusCode >= 500) {
