@@ -1,7 +1,7 @@
-import { getProduct } from "../api/product.api";
-import { API_URL } from "../config/env";
-import { cartService } from "../services/cart.service";
-import { toView } from "../services/product.service";
+import {getProduct} from "../api/product.api";
+import {API_URL} from "../config/env";
+import {cartService} from "../services/cart.service";
+import {toView} from "../services/product.service";
 
 const renderEmptyCart = () => `
     <div class="page">
@@ -151,9 +151,7 @@ const Cart = () => {
         const { authService } = await import("@/services/auth.service");
         const isLoggedIn = authService.isLoggedIn();
 
-        // Afficher le panier
-        const html = await renderCart(isLoggedIn);
-        container.innerHTML = html;
+        container.innerHTML = await renderCart(isLoggedIn);
 
         mountCartActions();
     };
