@@ -1,7 +1,7 @@
 jest.mock("@/config/env", () => ({ API_URL: "http://test:5000" }));
 
-import { toProductCardView } from "@/mappers/productPresenter";
-import type { ProductView } from "@/services/productService";
+import { toProductCardView } from "@/mappers/product.presenter";
+import type { ProductView } from "@/services/product.service";
 
 const makeProductView = (overrides: Partial<ProductView> = {}): ProductView => ({
     id: "1",

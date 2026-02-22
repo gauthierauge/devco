@@ -4,7 +4,7 @@ import {
     logout as logoutApi,
     getCurrentUser as getCurrentUserApi,
     type AuthResponse,
-} from "@/api/authApi";
+} from "@/api/auth.api";
 import { AUTH_STORAGE_KEY } from "@/constants/auth.constant";
 
 interface User extends AuthResponse { }
@@ -31,7 +31,7 @@ const register = async (email: string, password: string): Promise<User> => {
     storeUser(user);
 
     try {
-        const { cartService } = await import("./cartService");
+        const { cartService } = await import("./cart.service");
         await cartService.syncCart();
     } catch (error) {
         console.error("Erreur lors de la synchronisation du panier :", error);
@@ -45,7 +45,7 @@ const login = async (email: string, password: string): Promise<User> => {
     storeUser(user);
 
     try {
-        const { cartService } = await import("./cartService");
+        const { cartService } = await import("./cart.service");
         await cartService.syncCart();
     } catch (error) {
         console.error("Erreur lors de la synchronisation du panier :", error);
@@ -56,7 +56,7 @@ const login = async (email: string, password: string): Promise<User> => {
 
 const logout = async (): Promise<void> => {
     try {
-        const { cartService } = await import("./cartService");
+        const { cartService } = await import("./cart.service");
         await cartService.syncCart([]);
     } catch (error) {
         console.error("Erreur lors du nettoyage du panier :", error);

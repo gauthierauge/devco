@@ -1,5 +1,5 @@
-import { authService } from "@/services/authService";
-import { loginSchema, type LoginFormData } from "@/utils/passwordValidator";
+import { authService } from "@/services/auth.service";
+import {type LoginFormData, loginSchema} from "@/utils/passwordValidator.ts";
 import { z } from "zod";
 
 const renderLogin = () => `
@@ -12,11 +12,11 @@ const renderLogin = () => `
             <form id="login-form" class="form">
             <label>
                 Email
-                <input name="email" type="email" placeholder="vous@exemple.com" autocomplete="email" required />
+                <input name="email" type="email" placeholder="vous@exemple.com" required />
             </label>
             <label>
                 Mot de passe
-                <input name="password" type="password" placeholder="••••••••" autocomplete="current-password" required />
+                <input name="password" type="password" placeholder="••••••••" required />
             </label>
             
             <button class="btn" type="submit">Se connecter</button>
@@ -56,7 +56,7 @@ const Login = () => {
 
                 window.history.pushState({}, "", "/dashboard");
                 window.dispatchEvent(new PopStateEvent("popstate"));
-            } catch (error) {
+            } catch (error: unknown) {
 
                 let message = "Une erreur est survenue lors de la connexion";
 
@@ -70,6 +70,7 @@ const Login = () => {
                     errorDiv.textContent = message;
                     errorDiv.style.display = "block";
                 }
+
             }
         });
     };

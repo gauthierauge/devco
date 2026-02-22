@@ -1,8 +1,8 @@
-﻿import { getProduct } from "@/api/productApi";
+﻿import { getProduct } from "@/api/product.api";
 import { API_URL } from "@/config/env";
-import { toView } from "@/services/productService";
-import { cartService } from "@/services/cartService";
-import { authService } from "@/services/authService";
+import { toView } from "@/services/product.service";
+import { cartService } from "@/services/cart.service";
+import { authService } from "@/services/auth.service";
 
 const renderProduct = (product: Awaited<ReturnType<typeof getProduct>>) => {
   const view = toView(product);

@@ -1,5 +1,5 @@
-import { authService } from "@/services/authService";
-import { cartService } from "@/services/cartService";
+import { authService } from "@/services/auth.service";
+import { cartService } from "@/services/cart.service";
 
 const Navbar = () => {
   const user = authService.getCurrentUser();

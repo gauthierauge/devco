@@ -1,4 +1,4 @@
-import type { StatView } from "@/services/statsService";
+import type { StatView } from "@/services/stats.service";
 
 type StatListView = StatView & {
   displayName: string;

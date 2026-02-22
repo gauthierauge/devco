@@ -1,12 +1,12 @@
 jest.mock("@/config/env", () => ({ API_URL: "http://test:5000" }));
-jest.mock("@/services/authService", () => ({
+jest.mock("@/services/auth.service", () => ({
     authService: {
         isLoggedIn: jest.fn(),
     },
 }));
 
 import { checkRouteAccess } from "@/router/protect";
-import { authService } from "@/services/authService";
+import { authService } from "@/services/auth.service";
 
 const mockIsLoggedIn = jest.mocked(authService.isLoggedIn);
 

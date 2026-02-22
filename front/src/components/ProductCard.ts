@@ -1,4 +1,4 @@
-import type { ProductCardView } from "@/mappers/productPresenter";
+import type { ProductCardView } from "@/mappers/product.presenter";
 
 type ProductCardProps = ProductCardView & {
   canManage: boolean;

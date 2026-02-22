@@ -9,7 +9,7 @@ export const passwordSchema = z
     .regex(/[^a-zA-Z0-9]/, "Le mot de passe doit contenir au moins un caractère spécial");
 
 export const registerSchema = z.object({
-    email: z.email("Adresse email invalide"),
+    email: z.string().email("Adresse email invalide"),
     password: passwordSchema,
     confirmPassword: z.string(),
 }).refine((data) => data.password === data.confirmPassword, {
@@ -18,7 +18,7 @@ export const registerSchema = z.object({
 });
 
 export const loginSchema = z.object({
-    email: z.email("Adresse email invalide"),
+    email: z.string().email("Adresse email invalide"),
     password: z.string().min(1, "Le mot de passe est requis"),
 });
 

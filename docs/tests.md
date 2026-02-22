@@ -85,17 +85,17 @@ back/tests/
 
 ```
 front/tests/
-├── productService.test.ts      # formatPrice, toView, filterProducts
-├── statsService.test.ts        # totalCount, toView (pourcentages)
-├── cspReportService.test.ts    # toView (mapping champs, date fr-FR)
-├── statsPresenter.test.ts      # toStatListView (displayName)
-├── cspReportPresenter.test.ts  # presentCspReportRow, presentCspReportTable
-├── productPresenter.test.ts    # toProductCardView (resolution imageUrl)
+├── product.service.test.ts     # formatPrice, toView, filterProducts
+├── stats.service.test.ts       # totalCount, toView (pourcentages)
+├── cspReport.service.test.ts   # toView (mapping champs, date fr-FR)
+├── stats.presenter.test.ts     # toStatListView (displayName)
+├── cspReport.presenter.test.ts # presentCspReportRow, presentCspReportTable
+├── product.presenter.test.ts   # toProductCardView (resolution imageUrl)
 ├── client.test.ts              # request() : GET, POST, CSRF token, erreurs, 204
-├── authApi.test.ts             # register, login, logout, getCurrentUser
-├── productApi.test.ts          # listProducts, createProduct, deleteProduct
-├── statsApi.test.ts            # listStats (credentials: "omit")
-├── authService.test.ts         # register/login/logout + localStorage, validateSession
+├── auth.api.test.ts            # register, login, logout, getCurrentUser
+├── product.api.test.ts         # listProducts, createProduct, deleteProduct
+├── stats.api.test.ts           # listStats (credentials: "omit")
+├── auth.service.test.ts        # register/login/logout + localStorage, validateSession
 └── protect.test.ts             # checkRouteAccess (public, protected, auth-only)
 ```
 

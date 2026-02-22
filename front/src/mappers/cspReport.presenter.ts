@@ -1,4 +1,4 @@
-import type { CspReportView } from "@/services/cspReportService";
+import type { CspReportView } from "@/services/cspReport.service";
 
 const presentCspReportRow = (report: CspReportView): string => `
       <tr>

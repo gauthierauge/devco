@@ -1,4 +1,4 @@
-import { authService } from "@/services/authService";
+import { authService } from "@/services/auth.service";
 import { registerSchema, type RegisterFormData } from "@/utils/passwordValidator";
 import { z } from "zod";
 
@@ -12,18 +12,18 @@ const renderRegister = () => `
             <form id="register-form" class="form">
             <label>
                 Email
-                <input name="email" type="email" placeholder="vous@exemple.com" autocomplete="email" required />
+                <input name="email" type="email" placeholder="vous@exemple.com" required />
             </label>
             <label>
                 Mot de passe
-                <input name="password" type="password" placeholder="••••••••" autocomplete="new-password" minlength="15" required />
+                <input name="password" type="password" placeholder="••••••••" minlength="15" required />
             </label>
             <label>
                 Confirmer le mot de passe
-                <input name="confirm-password" type="password" placeholder="••••••••" autocomplete="new-password" minlength="15" required />
+                <input name="confirm-password" type="password" placeholder="••••••••" minlength="15" required />
             </label>
             
-            <small>Le mot de passe doit contenir au minimum 15 caractères (majuscule, minuscule, chiffre et caractère spécial).</small>
+            <small>Le mot de passe doit contenir au minimum 15 caractères.</small>
             
             <button class="btn" type="submit">S'inscrire</button>
             </form>

@@ -1,7 +1,7 @@
 jest.mock("@/config/env", () => ({ API_URL: "http://test:5000" }));
 jest.mock("@/api/client", () => ({ request: jest.fn() }));
 
-import { listProducts, createProduct, deleteProduct } from "@/api/productApi";
+import { listProducts, createProduct, deleteProduct } from "@/api/product.api";
 import { request } from "@/api/client";
 
 const BASE_URL = "http://test:5000/api/v1";

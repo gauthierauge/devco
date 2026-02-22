@@ -1,4 +1,4 @@
-import { authService } from "@/services/authService";
+import { authService } from "@/services/auth.service";
 
 type ProtectionLevel = "public" | "protected" | "auth-only";
 

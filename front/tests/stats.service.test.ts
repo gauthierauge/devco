@@ -1,5 +1,5 @@
-import { totalCount, toView } from "@/services/statsService";
-import type { StatDto } from "@/api/statsApi";
+import { totalCount, toView } from "@/services/stats.service";
+import type { StatDto } from "@/api/stats.api";
 
 describe("totalCount", () => {
     it("somme les compte de tous les stats", () => {

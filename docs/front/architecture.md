@@ -22,21 +22,21 @@ front/src/
 │   └── protect.ts             # Controle d'acces aux routes
 ├── api/
 │   ├── client.ts              # Wrapper fetch avec injection CSRF
-│   ├── authApi.ts             # register, login, logout, getCurrentUser
-│   ├── productApi.ts          # listProducts, createProduct, updateProduct, deleteProduct
+│   ├── auth.api.ts            # register, login, logout, getCurrentUser
+│   ├── product.api.ts         # listProducts, createProduct, updateProduct, deleteProduct
 │   ├── cartApi.ts             # getCart, addItem, updateItem, removeItem, syncCart
-│   ├── statsApi.ts            # listStats
-│   └── cspReportApi.ts        # listCspReports
+│   ├── stats.api.ts           # listStats
+│   └── cspReport.api.ts       # listCspReports
 ├── services/
-│   ├── authService.ts         # Etat auth (localStorage) + validation session
-│   ├── cartService.ts         # Etat panier (localStorage) + sync serveur
-│   ├── productService.ts      # Filtrage et formatage produits
-│   ├── statsService.ts        # Calculs statistiques
-│   └── cspReportService.ts    # Transformation rapports CSP
+│   ├── auth.service.ts        # Etat auth (localStorage) + validation session
+│   ├── cart.service.ts        # Etat panier (localStorage) + sync serveur
+│   ├── product.service.ts     # Filtrage et formatage produits
+│   ├── stats.service.ts       # Calculs statistiques
+│   └── cspReport.service.ts   # Transformation rapports CSP
 ├── mappers/
-│   ├── productPresenter.ts    # Product -> vue carte
-│   ├── statsPresenter.ts      # Stats -> vue liste
-│   └── cspReportPresenter.ts  # CspReport -> vue tableau
+│   ├── product.presenter.ts   # Product -> vue carte
+│   ├── stats.presenter.ts     # Stats -> vue liste
+│   └── cspReport.presenter.ts # CspReport -> vue tableau
 ├── pages/
 │   ├── Home.ts                # Liste produits + formulaire CRUD + panier
 │   ├── Product.ts             # Detail d'un produit
