@@ -13,5 +13,3 @@ const reportToMiddleware = (req: Request, res: Response, next: NextFunction) => 
 };
 
 export { reportToMiddleware };
-
-//corriger ça

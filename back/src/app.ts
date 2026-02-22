@@ -34,7 +34,6 @@ const createApp = () => {
     app.use(express.json({ limit: "10kb" }));
     app.use(express.json({ type: "application/csp-report", limit: "5kb" }));
 
-    // Sécurité headers
     app.use(cspNonceMiddleware);
     app.use(csrfGenerateMiddleware);
     app.use(csrfVerifyMiddleware);
@@ -43,7 +42,6 @@ const createApp = () => {
     app.use(reportToMiddleware);
     app.use(cors(corsOptions));
 
-    // Protections
     app.use(globalLimiter);
     app.use(xssSanitizer);
 
